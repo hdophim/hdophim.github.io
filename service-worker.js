@@ -63,25 +63,33 @@ async function fetchAndProcessPlaylist(playlistUrl) {
 function cleanManifest(manifest) {
   const lines = manifest.split(/\r?\n/);
   const result = [];
+
   let i = 0;
 
   while (i < lines.length) {
     const line = lines[i].trim();
 
     if (line !== "#EXT-X-DISCONTINUITY") {
-      if (line) result.push(lines[i]);
+      result.push(lines[i]);
       i++;
       continue;
     }
 
-    let start = i;
+    const start = i;
     let j = i + 1;
     let segments = 0;
+    let hasKeyNone = false;
 
     while (j < lines.length) {
       const l = lines[j].trim();
+
       if (l.startsWith("#EXTINF:")) segments++;
+
+      if (l.includes("#EXT-X-KEY:METHOD=NONE"))
+        hasKeyNone = true;
+
       if (l === "#EXT-X-DISCONTINUITY") break;
+
       j++;
     }
 
@@ -91,17 +99,20 @@ function cleanManifest(manifest) {
       continue;
     }
 
-    if (segments >= 5 && segments <= 20) {
-      console.log(`[SW] Đã loại bỏ block quảng cáo: ${segments} segments.`);
+    if (hasKeyNone || (segments >= 5 && segments <= 20)) {
       i = j + 1;
       continue;
     }
 
     for (let k = start; k <= j; k++) {
-      if (lines[k].trim()) result.push(lines[k]);
+      result.push(lines[k]);
     }
+
     i = j + 1;
   }
 
-  return result.join("\n").replace(/\n{2,}/g, "\n").trim();
+  return result.join("\n")
+    .replace(/\/convertv7\//g, "/")
+    .replace(/\n{2,}/g, "\n")
+    .trim();
 }
