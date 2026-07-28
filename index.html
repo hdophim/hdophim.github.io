@@ -129,6 +129,34 @@
             object-fit: contain;
         }
 
+        /* 🔧 Sửa lỗi max-width gây tràn / co giãn bất thường */
+        .max-w-7xl {
+            max-width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .max-w-7xl {
+                max-width: 640px;
+            }
+        }
+        @media (min-width: 768px) {
+            .max-w-7xl {
+                max-width: 768px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .max-w-7xl {
+                max-width: 1024px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .max-w-7xl {
+                max-width: 1280px;
+            }
+        }
+
         /* 🔧 Tối ưu hiển thị khi xoay ngang */
         @media (max-width: 820px) and (orientation: landscape) {
             .grid-cols-2 {
@@ -232,10 +260,6 @@
         }
         .accordion-toggle.open .lucide-chevron-down {
             transform: rotate(180deg);
-        }
-
-        .max-w-7xl {
-            max-width: 100% !important;
         }
 
         #app-content {
@@ -365,7 +389,7 @@
 
             <!-- Mobile Search + Menu Toggle -->
             <div class="flex items-center gap-2 flex-1 md:flex-none justify-end">
-                <form id="search-form-mobile-header" class="relative flex-1 max-w-[130px] sm:max-w-xs block md:hidden">
+                <form id="search-form-mobile-header" class="relative flex-1 max-w-[160px] sm:max-w-xs block md:hidden">
                     <input type="text" id="search-input-mobile-header" placeholder="Tìm phim..."
                     class="w-full bg-slate-900/80 text-sm text-slate-200 pl-8 pr-3 py-1.5 rounded-full border border-slate-700/60 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30 transition placeholder:text-slate-500 search-input">
                     <i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -477,27 +501,7 @@
                 setTimeout(() => lucide.createIcons(), 50);
             }
 
-            function handleOrientationChange() {
-                setTimeout(function() {
-                    document.body.style.display = 'none';
-                    void document.body.offsetHeight;
-                    document.body.style.display = '';
-                    window.scrollTo(0, 0);
-                }, 350);
-            }
-
-            if (window.orientation !== undefined) {
-                window.addEventListener('orientationchange', handleOrientationChange);
-            }
-            let resizeTimer = null;
-            window.addEventListener('resize', function() {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(function() {
-                    if (window.innerWidth < 820) {
-                        handleOrientationChange();
-                    }
-                }, 400);
-            });
+            // Đã xóa bỏ hàm handleOrientationChange và các listener resize gây "nhảy nhảy"
 
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
@@ -1135,19 +1139,15 @@
                 };
 
                 // Không tự động play, để người dùng bấm nút play (iOS yêu cầu)
-                // Chỉ set vị trí thời gian khi sẵn sàng
                 let initialSeekDone = false;
 
                 player.addEventListener('can-play', () => {
                     if (!initialSeekDone && startTime > 0) {
-                        // iOS: có thể set currentTime nhưng không play
                         player.currentTime = startTime;
                         initialSeekDone = true;
                     }
-                    // Không gọi play() tự động
                 }, { once: true });
 
-                // Nếu không có can-play, dùng loadedmetadata
                 player.addEventListener('loadedmetadata', () => {
                     if (!initialSeekDone && startTime > 0) {
                         player.currentTime = startTime;
