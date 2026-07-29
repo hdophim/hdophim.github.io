@@ -356,7 +356,7 @@
                     <button class="flex items-center gap-1 hover:text-brand transition whitespace-nowrap">
                         Thể Loại <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </button>
-                    <div class="dropdown-menu absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 grid grid-cols-2 md:grid-cols-3 gap-1 w-64 md:w-80 p-3 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-xl shadow-2xl max-h-72 overflow-y-auto dropdown-scroll" id="dropdown-theloai">
+                    <div class="dropdown-menu absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 grid grid-cols-2 md:grid-cols-3 gap-1 w-64 md:w-80 p-3 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-xl shadow-2xl max-h-80 overflow-y-auto dropdown-scroll" id="dropdown-theloai">
                         <span class="col-span-3 text-xs text-slate-500 text-center py-2">Đang tải...</span>
                     </div>
                 </div>
@@ -366,7 +366,7 @@
                     <button class="flex items-center gap-1 hover:text-brand transition whitespace-nowrap">
                         Quốc Gia <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </button>
-                    <div class="dropdown-menu absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 grid grid-cols-2 gap-1 w-56 md:w-64 p-3 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-xl shadow-2xl max-h-72 overflow-y-auto dropdown-scroll" id="dropdown-quocgia">
+                    <div class="dropdown-menu absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 grid grid-cols-2 gap-1 w-56 md:w-64 p-3 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-xl shadow-2xl max-h-80 overflow-y-auto dropdown-scroll" id="dropdown-quocgia">
                         <span class="col-span-2 text-xs text-slate-500 text-center py-2">Đang tải...</span>
                     </div>
                 </div>
@@ -376,7 +376,7 @@
                     <button class="flex items-center gap-1 hover:text-brand transition whitespace-nowrap">
                         Năm <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </button>
-                    <div class="dropdown-menu absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 grid grid-cols-3 gap-1 w-52 md:w-60 p-3 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-xl shadow-2xl max-h-72 overflow-y-auto dropdown-scroll" id="dropdown-nam">
+                    <div class="dropdown-menu absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 grid grid-cols-3 gap-1 w-52 md:w-60 p-3 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-xl shadow-2xl max-h-80 overflow-y-auto dropdown-scroll" id="dropdown-nam">
                         <span class="col-span-3 text-xs text-slate-500 text-center py-2">Đang tải...</span>
                     </div>
                 </div>
@@ -418,7 +418,7 @@
                     <span>Thể Loại</span>
                     <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
                 </button>
-                <div class="accordion-content hidden pl-2 grid grid-cols-2 gap-1 pb-2 mobile-theloai-content"></div>
+                <div class="accordion-content hidden pl-2 grid grid-cols-2 gap-1 pb-2 max-h-60 overflow-y-auto mobile-theloai-content"></div>
             </div>
 
             <!-- Accordion: Quốc Gia -->
@@ -427,7 +427,7 @@
                     <span>Quốc Gia</span>
                     <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
                 </button>
-                <div class="accordion-content hidden pl-2 grid grid-cols-2 gap-1 pb-2 mobile-quocgia-content"></div>
+                <div class="accordion-content hidden pl-2 grid grid-cols-2 gap-1 pb-2 max-h-60 overflow-y-auto mobile-quocgia-content"></div>
             </div>
 
             <!-- Accordion: Năm -->
@@ -436,7 +436,7 @@
                     <span>Năm Phát Hành</span>
                     <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
                 </button>
-                <div class="accordion-content hidden pl-2 grid grid-cols-3 gap-1 pb-2 mobile-nam-content"></div>
+                <div class="accordion-content hidden pl-2 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1 pb-2 max-h-60 overflow-y-auto mobile-nam-content"></div>
             </div>
 
             <form id="search-form-mobile-menu" class="pt-2 border-t border-slate-800">
@@ -1283,4 +1283,4 @@
         })();
     </script>
 </body>
-</html>
+    </html>
