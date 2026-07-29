@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PhimFlix • Xem Phim HD Online</title>
+    <title>HDOphim • Xem Phim HD Online</title>
 
     <!-- Tự động chuyển theme sáng/tối theo trình duyệt -->
     <script>
@@ -240,7 +240,7 @@
             <!-- Logo -->
             <a href="#/" class="flex items-center gap-1.5 logo-text font-black tracking-tight text-brand shrink-0">
                 <i data-lucide="clapperboard" class="w-6 h-6 md:w-7 md:h-7"></i>
-                <span>PHIM<span class="text-gray-900 dark:text-white">FLIX</span></span>
+                <span>HDO<span class="text-gray-900 dark:text-white">phim</span></span>
             </a>
 
             <!-- Desktop Nav -->
@@ -364,7 +364,7 @@
     <!-- ===== FOOTER ===== -->
     <footer class="border-t border-gray-200 dark:border-slate-900 bg-white dark:bg-slate-950 py-6 md:py-8 text-center footer-text text-gray-500 dark:text-slate-500">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p>© 2026 PhimFlix · Xem phim trực tuyến miễn phí</p>
+            <p>© 2026 HDOphim · Xem phim trực tuyến miễn phí</p>
             <p class="flex items-center gap-1">Hosted on <span class="text-gray-700 dark:text-slate-400">GitHub Pages</span> <i data-lucide="github" class="w-3.5 h-3.5"></i></p>
         </div>
     </footer>
@@ -380,7 +380,10 @@
         (function() {
             const API_BASE = 'https://phimapi.com';
             const IMG_DOMAIN = 'https://phimimg.com';
-            const HISTORY_KEY = 'phimflix_history_v1';
+            const HISTORY_KEY = 'hdo_history_v1';
+
+            // Phát hiện iOS để chặn autoplay
+            const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
 
             let categoriesCache = [];
             let countriesCache = [];
@@ -389,7 +392,7 @@
             let cachedMovieData = null;
 
             function updatePageTitle(title) {
-                document.title = title || 'PhimFlix • Xem Phim HD Online';
+                document.title = title || 'HDOphim • Xem Phim HD Online';
             }
 
             function renderContent(html) {
@@ -616,7 +619,7 @@
 
             async function viewHome() {
                 showSkeleton();
-                updatePageTitle('Trang chủ - PhimFlix');
+                updatePageTitle('Trang chủ - HDOphim');
                 try {
                     const res = await fetch(`${API_BASE}/v1/api/home`).then(r => r.json());
                     const items = res?.data?.items || [];
@@ -680,7 +683,7 @@
 
             async function viewCatalog(endpointUrl, fallbackTitle, hashPrefix) {
                 showSkeleton();
-                updatePageTitle(fallbackTitle + ' - PhimFlix');
+                updatePageTitle(fallbackTitle + ' - HDOphim');
                 try {
                     const res = await fetch(endpointUrl).then(r => r.json());
                     const data = res?.data || res;
@@ -711,7 +714,7 @@
 
             async function viewSearch(keyword, page = 1) {
                 showSkeleton();
-                updatePageTitle('Tìm kiếm: ' + keyword + ' - PhimFlix');
+                updatePageTitle('Tìm kiếm: ' + keyword + ' - HDOphim');
                 try {
                     const res = await fetch(
                         `${API_BASE}/v1/api/tim-kiem?keyword=${encodeURIComponent(keyword)}&page=${page}`).then(r => r.json());
@@ -739,7 +742,7 @@
             }
 
             async function viewHistory() {
-                updatePageTitle('Lịch sử xem phim - PhimFlix');
+                updatePageTitle('Lịch sử xem phim - HDOphim');
                 const historyMap = getWatchHistory();
                 const items = Object.values(historyMap).sort((a, b) => b.updatedAt - a.updatedAt);
 
@@ -848,18 +851,18 @@
             async function viewMovieDetail(slug, queryParams) {
                 if (!cachedMovieData || cachedMovieData.movie?.slug !== slug) {
                     showSkeleton();
-                    updatePageTitle('Đang tải phim... - PhimFlix');
+                    updatePageTitle('Đang tải phim... - HDOphim');
                     try {
                         const res = await fetch(`${API_BASE}/phim/${slug}`).then(r => r.json());
                         if (!res.status) {
                             renderContent('<p class="text-center py-20 text-red-400">Phim không tồn tại.</p>');
-                            updatePageTitle('Phim không tồn tại - PhimFlix');
+                            updatePageTitle('Phim không tồn tại - HDOphim');
                             return;
                         }
                         cachedMovieData = res;
                     } catch (err) {
                         renderContent('<p class="text-center py-20 text-red-400">⚠️ Lỗi tải chi tiết phim.</p>');
-                        updatePageTitle('Lỗi - PhimFlix');
+                        updatePageTitle('Lỗi - HDOphim');
                         return;
                     }
                 }
@@ -871,12 +874,11 @@
                 const startTime = parseFloat(queryParams.t || '0');
 
                 if (movie && movie.name) {
-                    updatePageTitle(movie.name + ' - PhimFlix');
+                    updatePageTitle(movie.name + ' - HDOphim');
                 }
 
                 const savedHistory = getWatchHistory()[slug];
 
-                // Lấy dữ liệu server và tập hiện tại
                 const serverData = episodes[activeServerIdx]?.server_data || [];
                 const currentEpIndex = serverData.findIndex(ep => ep.slug === activeEpSlug);
                 const currentPlayingEp = currentEpIndex >= 0 ? serverData[currentEpIndex] : null;
@@ -1047,19 +1049,22 @@
 
                 let initialSeekDone = false;
 
-                player.addEventListener('can-play', () => {
+                // Hàm xử lý khi player sẵn sàng
+                const onReady = () => {
                     if (!initialSeekDone && startTime > 0) {
                         player.currentTime = startTime;
                         initialSeekDone = true;
                     }
-                }, { once: true });
+                    // Nếu không phải iOS, tự động play
+                    if (!isIOS) {
+                        player.play().catch(() => {
+                            // Autoplay có thể bị chặn, không làm gì
+                        });
+                    }
+                };
 
-                player.addEventListener('loadedmetadata', () => {
-                    if (!initialSeekDone && startTime > 0) {
-                        player.currentTime = startTime;
-                        initialSeekDone = true;
-                    }
-                }, { once: true });
+                player.addEventListener('can-play', onReady, { once: false }); // dùng once: false để đảm bảo sau khi thay đổi src
+                player.addEventListener('loadedmetadata', onReady, { once: false });
 
                 if (movieMeta) {
                     let lastSaved = 0;
