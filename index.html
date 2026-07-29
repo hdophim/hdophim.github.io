@@ -1,9 +1,30 @@
 <!DOCTYPE html>
-<html lang="vi" class="dark">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>PhimFlix • Xem Phim HD Online</title>
+
+    <!-- Tự động chuyển theme sáng/tối theo trình duyệt -->
+    <script>
+        (function() {
+            // Áp dụng theme ngay khi load
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            // Lắng nghe khi người dùng thay đổi cài đặt hệ thống
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (e.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            });
+        })();
+    </script>
 
     <!-- Font chữ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1283,4 +1304,4 @@
         })();
     </script>
 </body>
-    </html>
+</html>
