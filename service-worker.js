@@ -3,10 +3,15 @@ const PROXY_PREFIX = '/proxy-stream';
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', () => self.clients.claim());
 
+function isProxyRequest(url) {
+  const segments = url.pathname.split('/').filter(Boolean);
+  return segments[segments.length - 1] === 'proxy-stream';
+}
+
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  if (url.pathname.startsWith(PROXY_PREFIX)) {
+  if (isProxyRequest(url)) {
     event.respondWith(handleVirtualRequest(event));
   }
 });
