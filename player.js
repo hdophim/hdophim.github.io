@@ -1205,6 +1205,9 @@
     opacity: 0;
     transition: opacity .3s ease;
     z-index: 5;
+    overflow: visible;
+    container-type: inline-size;
+    container-name: hdo-controls;
   }
   .hdo-player.controls-show .hdo-controls { opacity: 1; }
   .hdo-player.controls-show .hdo-big-play.hdo-big-play { display: none; }
@@ -1278,12 +1281,19 @@
     justify-content: space-between;
     gap: 4px;
     margin-top: 4px;
+    min-width: 0;
+    overflow: hidden;
   }
   .hdo-bar-left,
   .hdo-bar-right {
     display: flex;
     align-items: center;
     gap: 2px;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+  .hdo-bar-right {
+    flex-shrink: 1;
   }
   .hdo-btn {
     position: relative;
@@ -1292,32 +1302,42 @@
     color: #fff;
     width: 36px;
     height: 36px;
+    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     border-radius: 50%;
     transition: background .15s;
+    flex-shrink: 1;
+    padding: 0;
   }
   .hdo-btn:hover { background: rgba(255,255,255,.15); }
-  .hdo-btn svg { width: 22px; height: 22px; }
+  .hdo-btn svg { width: 22px; height: 22px; min-width: 0; }
   .hdo-btn-label {
     font-size: 11px;
     font-weight: 700;
     margin-left: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 36px;
   }
   .hdo-btn.hdo-stream-btn,
   .hdo-btn.hdo-speed-btn {
     width: auto;
+    min-width: 0;
     padding: 0 8px;
     gap: 2px;
     border-radius: 6px;
+    flex-shrink: 1;
+    overflow: hidden;
   }
 
-  .hdo-time { font-size: 13px; color: #fff; margin-left: 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .hdo-time { font-size: 13px; color: #fff; margin-left: 6px; font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 1; min-width: 0; overflow: hidden; }
 
   /* Volume */
-  .hdo-vol-wrap { position: relative; display: flex; align-items: center; }
+  .hdo-vol-wrap { position: relative; display: flex; align-items: center; flex-shrink: 0; }
   .hdo-vol-slider {
     position: absolute;
     left: 50%;
@@ -1354,7 +1374,8 @@
     background: rgba(28, 28, 28, .96);
     border-radius: 12px;
     padding: 0;
-    min-width: 160px;
+    min-width: 140px;
+    max-width: 80%;
     z-index: 10;
     opacity: 0;
     transform: translateY(12px) scale(.95);
@@ -1408,6 +1429,47 @@
   .hdo-menu-item.active { color: #e50914; font-weight: 700; }
   .hdo-menu-item.active::after { content: '\\2713'; margin-left: 8px; }
 
+  /* Container query: scale controls for small player */
+  @container hdo-controls (max-width: 280px) {
+    .hdo-controls { padding: 6px 4px 4px; }
+    .hdo-controls-bar { gap: 2px; margin-top: 2px; }
+    .hdo-btn { width: 26px; height: 26px; }
+    .hdo-btn svg { width: 16px; height: 16px; }
+    .hdo-btn.hdo-stream-btn,
+    .hdo-btn.hdo-speed-btn { padding: 0 4px; gap: 1px; }
+    .hdo-btn-label { font-size: 9px; margin-left: 1px; max-width: 28px; }
+    .hdo-time { font-size: 10px; margin-left: 3px; }
+    .hdo-bar-left,
+    .hdo-bar-right { gap: 1px; }
+    .hdo-progress { height: 18px; }
+    .hdo-big-play { width: 44px; height: 44px; }
+    .hdo-big-play svg { width: 22px; height: 22px; }
+    .hdo-spinner { width: 36px; height: 36px; }
+    .hdo-vol-slider { width: 32px; height: 80px; }
+    .hdo-vol-input { height: 60px; }
+  }
+  @container hdo-controls (max-width: 200px) {
+    .hdo-controls { padding: 4px 3px 3px; }
+    .hdo-controls-bar { gap: 1px; margin-top: 1px; }
+    .hdo-btn { width: 22px; height: 22px; border-radius: 4px; }
+    .hdo-btn svg { width: 13px; height: 13px; }
+    .hdo-btn.hdo-stream-btn,
+    .hdo-btn.hdo-speed-btn { padding: 0 3px; border-radius: 3px; }
+    .hdo-btn-label { font-size: 8px; margin-left: 0; max-width: 22px; }
+    .hdo-time { font-size: 9px; margin-left: 2px; }
+    .hdo-progress { height: 14px; }
+    .hdo-big-play { width: 36px; height: 36px; }
+    .hdo-big-play svg { width: 18px; height: 18px; }
+    .hdo-seek-ico svg { width: 16px; height: 16px; }
+    .hdo-seek-text { font-size: 14px; min-width: 16px; }
+    .hdo-spinner { width: 28px; height: 28px; }
+    .hdo-menu { min-width: 110px; bottom: 48px; }
+    .hdo-menu-item { padding: 6px 10px; font-size: 11px; }
+    .hdo-menu-title { font-size: 10px; }
+    .hdo-vol-slider { width: 28px; height: 70px; }
+    .hdo-vol-input { height: 50px; }
+  }
+
   @media (max-width: 640px) {
     .hdo-big-play { width: 58px; height: 58px; }
     .hdo-btn { width: 32px; height: 32px; }
@@ -1415,6 +1477,7 @@
     .hdo-time { font-size: 12px; }
     .hdo-seek-left { left: 8%; }
     .hdo-seek-right { right: 8%; }
+    .hdo-controls-bar { gap: 3px; }
   }
   `;
 
