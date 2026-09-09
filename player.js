@@ -91,7 +91,7 @@
 
         <div class="hdo-big-play">${ICONS.play}</div>
 
-        <div class="hdo-tap-ripple"></div>
+        
 
         <div class="hdo-seek-indicator hdo-seek-left">
           <span class="hdo-seek-ico">${ICONS.rewind}</span>
@@ -134,51 +134,57 @@
             </div>
 
             <div class="hdo-bar-right">
-              <button type="button" class="hdo-btn hdo-stream-btn" aria-label="Chất lượng">${ICONS.settings}<span class="hdo-btn-label">Auto</span></button>
-              <button type="button" class="hdo-btn hdo-speed-btn" aria-label="Tốc độ">${ICONS.speed}<span class="hdo-btn-label">${this.startSettings.speed}x</span></button>
-              <button type="button" class="hdo-btn hdo-loop-btn" aria-label="Lặp lại">${ICONS.loop}</button>
-              <button type="button" class="hdo-btn hdo-screenshot-btn" aria-label="Chụp màn hình">${ICONS.screenshot}</button>
               ${document.pictureInPictureEnabled ? `<button type="button" class="hdo-btn hdo-pip-btn" aria-label="Mini player">${ICONS.pip}</button>` : ''}
               ${this._fullscreenEnabled() ? `<button type="button" class="hdo-btn hdo-fullscreen" aria-label="Toàn màn hình">${ICONS.maximize}</button>` : ''}
             </div>
           </div>
-
-          <div class="hdo-menu hdo-stream-menu">
-            <div class="hdo-menu-header">
-              <span class="hdo-menu-title">Chất lượng</span>
-              <button type="button" class="hdo-menu-close">${ICONS.minimize}</button>
-            </div>
-            <div class="hdo-menu-list"></div>
-          </div>
-          <div class="hdo-menu hdo-speed-menu">
-            <div class="hdo-menu-header">
-              <span class="hdo-menu-title">Tốc độ phát</span>
-              <button type="button" class="hdo-menu-close">${ICONS.minimize}</button>
-            </div>
-            <div class="hdo-menu-list"></div>
-          </div>
-
-          <div class="hdo-settings-panel">
-            <div class="hdo-settings-header">
-              <span class="hdo-settings-title">Cài đặt</span>
-              <button type="button" class="hdo-settings-close">${ICONS.close}</button>
-            </div>
-            <div class="hdo-settings-section">
-              <div class="hdo-settings-label">Tốc độ phát</div>
-              <div class="hdo-settings-speed-list"></div>
-            </div>
-            <div class="hdo-settings-section">
-              <div class="hdo-settings-label">Chất lượng</div>
-              <div class="hdo-settings-quality-list"></div>
-            </div>
-            <div class="hdo-settings-section">
-              <button type="button" class="hdo-settings-loop-toggle">
-                <span class="hdo-settings-loop-text">Lặp lại</span>
-                <span class="hdo-settings-loop-check"></span>
-              </button>
-            </div>
-          </div>
         </div>
+
+        <div class="hdo-yt-settings">
+          <button type="button" class="hdo-btn hdo-yt-gear" aria-label="Cài đặt">${ICONS.settings}</button>
+
+            <div class="hdo-yt-panel hdo-yt-panel-main">
+              <div class="hdo-yt-header">
+                <span class="hdo-yt-title">Cài đặt</span>
+              </div>
+              <div class="hdo-yt-items">
+                <button type="button" class="hdo-yt-item" data-sub="quality" aria-label="Chất lượng">
+                  <span class="hdo-yt-name">Chất lượng</span>
+                  <span class="hdo-yt-value hdo-yt-quality-val">Auto</span>
+                  <span class="hdo-yt-chev">&rsaquo;</span>
+                </button>
+                <button type="button" class="hdo-yt-item" data-sub="speed" aria-label="Tốc độ phát">
+                  <span class="hdo-yt-name">Tốc độ phát</span>
+                  <span class="hdo-yt-value hdo-yt-speed-val">${this.startSettings.speed}x</span>
+                  <span class="hdo-yt-chev">&rsaquo;</span>
+                </button>
+                <div class="hdo-yt-divider"></div>
+                <button type="button" class="hdo-yt-item hdo-yt-loop-item" aria-label="Lặp lại">
+                  <span class="hdo-yt-name">Lặp lại</span>
+                  <span class="hdo-yt-check hdo-yt-loop-check"></span>
+                </button>
+                <button type="button" class="hdo-yt-item hdo-yt-shot-item" aria-label="Chụp màn hình">
+                  <span class="hdo-yt-name">Chụp màn hình</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="hdo-yt-panel hdo-yt-panel-sub hdo-yt-sub-speed">
+              <div class="hdo-yt-header">
+                <button type="button" class="hdo-yt-back" aria-label="Quay lại">&lsaquo;</button>
+                <span class="hdo-yt-title">Tốc độ phát</span>
+              </div>
+              <div class="hdo-yt-list hdo-yt-speed-list"></div>
+            </div>
+
+            <div class="hdo-yt-panel hdo-yt-panel-sub hdo-yt-sub-quality">
+              <div class="hdo-yt-header">
+                <button type="button" class="hdo-yt-back" aria-label="Quay lại">&lsaquo;</button>
+                <span class="hdo-yt-title">Chất lượng</span>
+              </div>
+              <div class="hdo-yt-list hdo-yt-quality-list"></div>
+            </div>
+          </div>
 
         <div class="hdo-mini-player">
           <div class="hdo-mini-header">
@@ -189,9 +195,7 @@
               <button type="button" class="hdo-mini-close-btn">${ICONS.close}</button>
             </div>
           </div>
-          <div class="hdo-mini-video-wrap">
-            <video class="hdo-mini-video" playsinline webkit-playsinline></video>
-          </div>
+          <div class="hdo-mini-video-wrap"></div>
         </div>
       `;
 
@@ -201,7 +205,6 @@
       this.errorEl = this.container.querySelector('.hdo-error');
       this.errorMsg = this.container.querySelector('.hdo-error-msg');
       this.bigPlay = this.container.querySelector('.hdo-big-play');
-      this.tapRipple = this.container.querySelector('.hdo-tap-ripple');
       this.seekIndLeft = this.container.querySelector('.hdo-seek-left');
       this.seekIndRight = this.container.querySelector('.hdo-seek-right');
       this.seekIcoLeft = this.seekIndLeft.querySelector('.hdo-seek-ico');
@@ -224,72 +227,51 @@
       this.volFill = this.container.querySelector('.hdo-vol-fill');
       this.fullBtn = this.container.querySelector('.hdo-fullscreen');
       this.pipBtn = this.container.querySelector('.hdo-pip-btn');
-      this.streamBtn = this.container.querySelector('.hdo-stream-btn');
-      this.streamMenu = this.container.querySelector('.hdo-stream-menu');
-      this.streamList = this.streamMenu.querySelector('.hdo-menu-list');
-      this.speedBtn = this.container.querySelector('.hdo-speed-btn');
-      this.speedMenu = this.container.querySelector('.hdo-speed-menu');
-      this.speedLabel = this.container.querySelector('.hdo-speed-btn .hdo-btn-label');
-      this.streamLabel = this.container.querySelector('.hdo-stream-btn .hdo-btn-label');
-      this.loopBtn = this.container.querySelector('.hdo-loop-btn');
-      this.screenshotBtn = this.container.querySelector('.hdo-screenshot-btn');
+      this.ytSettings = this.container.querySelector('.hdo-yt-settings');
+      this.ytGear = this.container.querySelector('.hdo-yt-gear');
+      this.ytQualityList = this.container.querySelector('.hdo-yt-quality-list');
+      this.ytSpeedList = this.container.querySelector('.hdo-yt-speed-list');
+      this.ytQualityVal = this.container.querySelector('.hdo-yt-quality-val');
+      this.ytSpeedVal = this.container.querySelector('.hdo-yt-speed-val');
+      this.ytLoopItem = this.container.querySelector('.hdo-yt-loop-item');
+      this.ytLoopCheck = this.container.querySelector('.hdo-yt-loop-check');
+      this.ytShotItem = this.container.querySelector('.hdo-yt-shot-item');
+      this.ytPanelMain = this.container.querySelector('.hdo-yt-panel-main');
+      this.streamList = this.ytQualityList;
+      this.speedList = this.ytSpeedList;
+      this.speedLabel = this.ytSpeedVal;
+      this.streamLabel = this.ytQualityVal;
+      this.settingsLoopCheck = this.ytLoopCheck;
       this.longPressOverlay = this.container.querySelector('.hdo-longpress-overlay');
       this.netSpeedEl = this.container.querySelector('.hdo-net-speed');
-      this.settingsPanel = this.container.querySelector('.hdo-settings-panel');
-      this.settingsSpeedList = this.settingsPanel.querySelector('.hdo-settings-speed-list');
-      this.settingsQualityList = this.settingsPanel.querySelector('.hdo-settings-quality-list');
-      this.settingsLoopCheck = this.settingsPanel.querySelector('.hdo-settings-loop-check');
-      this.settingsLoopToggle = this.settingsPanel.querySelector('.hdo-settings-loop-toggle');
-      this.settingsCloseBtn = this.settingsPanel.querySelector('.hdo-settings-close');
       this.miniPlayer = this.container.querySelector('.hdo-mini-player');
-      this.miniVideo = this.container.querySelector('.hdo-mini-video');
       this.miniPlayBtn = this.container.querySelector('.hdo-mini-play-btn');
       this.miniFullBtn = this.container.querySelector('.hdo-mini-full-btn');
       this.miniCloseBtn = this.container.querySelector('.hdo-mini-close-btn');
 
-      this._buildStreamMenu();
-      this._buildSpeedMenu();
-      this._buildSettingsPanel();
+      this._buildSpeedList();
       this._applyVolume(this.startSettings.volume, this.startSettings.muted);
       this._setSpeed(this.startSettings.speed, false);
     }
 
-    _buildStreamMenu() {
-      this.streamList.innerHTML = '';
-    }
-
-    _buildSpeedMenu() {
-      const list = this.speedMenu.querySelector('.hdo-menu-list');
-      list.innerHTML = '';
+    _buildSpeedList() {
+      this.ytSpeedList.innerHTML = '';
+      const cur = this.video && this.video.playbackRate != null ? this.video.playbackRate : this.startSettings.speed;
       SPEEDS.forEach(s => {
         const item = document.createElement('button');
         item.type = 'button';
-        item.className = 'hdo-menu-item' + (s === this.startSettings.speed ? ' active' : '');
-        item.textContent = s + 'x';
-        item.addEventListener('click', () => this._setSpeed(s, true));
-        list.appendChild(item);
-      });
-    }
-
-    _buildSettingsPanel() {
-      this.settingsSpeedList.innerHTML = '';
-      SPEEDS.forEach(s => {
-        const item = document.createElement('button');
-        item.type = 'button';
-        item.className = 'hdo-settings-item' + (s === this.startSettings.speed ? ' active' : '');
+        item.className = 'hdo-yt-list-item' + (s === cur ? ' active' : '');
         item.textContent = s + 'x';
         item.addEventListener('click', () => {
           this._setSpeed(s, true);
-          this._buildSettingsPanel();
+          this._backToMain();
         });
-        this.settingsSpeedList.appendChild(item);
+        this.ytSpeedList.appendChild(item);
       });
-      this._updateSettingsQualityList();
-      this._updateSettingsLoop();
     }
 
-    _updateSettingsQualityList() {
-      this.settingsQualityList.innerHTML = '';
+    _buildQualityList() {
+      this.ytQualityList.innerHTML = '';
       const items = [];
       if (this._levels && this._levels.length > 1) {
         items.push({ label: 'Auto', value: -1 });
@@ -304,21 +286,17 @@
       items.forEach(item => {
         const el = document.createElement('button');
         el.type = 'button';
-        el.className = 'hdo-settings-item' + (item.value === this._quality ? ' active' : '');
+        el.className = 'hdo-yt-list-item' + (item.value === this._quality ? ' active' : '');
         el.textContent = item.label;
         el.addEventListener('click', () => {
           this._setLevel(item.value);
-          this._updateSettingsQualityList();
         });
-        this.settingsQualityList.appendChild(el);
+        this.ytQualityList.appendChild(el);
       });
     }
 
     _updateSettingsLoop() {
-      this.settingsLoopCheck.textContent = this._loop ? '\u2713' : '';
-      if (this.loopBtn) {
-        this.loopBtn.classList.toggle('active-loop', this._loop);
-      }
+      this.ytLoopCheck.textContent = this._loop ? '\u2713' : '';
     }
 
     // ============ STREAMS (multi-server/quality) ============
@@ -442,7 +420,7 @@
         if (data.level >= 0 && this._levels[data.level]) {
           this._quality = data.level;
           this.streamLabel.textContent = this._levels[data.level].height ? this._levels[data.level].height + 'p' : 'Auto';
-          this._updateSettingsQualityList();
+          this._buildQualityList();
         }
       });
 
@@ -472,7 +450,7 @@
         if (data.level >= 0 && this._levels[data.level]) {
           this._quality = data.level;
           this.streamLabel.textContent = this._levels[data.level].height ? this._levels[data.level].height + 'p' : 'Auto';
-          this._updateSettingsQualityList();
+          this._buildQualityList();
         }
       });
       hls.on(Hls.Events.ERROR, (_e, data) => this._onHlsError(data));
@@ -545,18 +523,9 @@
         list.push({ label: this._levels[0] && this._levels[0].height ? this._levels[0].height + 'p' : 'Auto', value: 0 });
       }
 
-      this.streamList.innerHTML = '';
-      list.forEach(item => {
-        const el = document.createElement('button');
-        el.type = 'button';
-        el.className = 'hdo-menu-item' + (item.value === this._quality ? ' active' : '');
-        el.textContent = item.label;
-        el.addEventListener('click', () => this._setLevel(item.value));
-        this.streamList.appendChild(el);
-      });
       const active = list.find(i => i.value === this._quality);
       if (active && active.value !== -1) this.streamLabel.textContent = active.label;
-      this._updateSettingsQualityList();
+      this._buildQualityList();
     }
 
     _setLevel(level) {
@@ -571,8 +540,7 @@
         }
         this._renderLevels();
       }
-      this._closeMenus();
-      this._hideSettingsPanel();
+      this._backToMain();
     }
 
     // ============ READY / SEEK / PLAY ============
@@ -628,9 +596,10 @@
       this._onPause = () => {
         container.classList.remove('playing');
         this.playBtn.innerHTML = ICONS.play;
-        if (v.ended) this.bigPlay.innerHTML = ICONS.replay;
-        this.bigPlay.classList.add('show');
-        this._showControls(false);
+        if (v.ended) {
+          this.bigPlay.innerHTML = ICONS.replay;
+          this.bigPlay.classList.add('show');
+        }
         if (this.netSpeedEl) this.netSpeedEl.style.display = 'none';
         this._stopMiniPlayer();
       };
@@ -680,7 +649,7 @@
 
       this._resetHideTimer = (shouldHide) => {
         clearTimeout(this._hideTimer);
-        if (shouldHide && !v.paused && !v.ended && !this._isMenuOpen() && !this.settingsPanel.classList.contains('open')) {
+        if (shouldHide && !v.paused && !v.ended && !this._isSettingsOpen()) {
           this._hideTimer = setTimeout(() => this._hideControls(), this._autoHideDelay);
         }
       };
@@ -706,6 +675,7 @@
       let pendingCenter = false;
 
       container.addEventListener('click', (e) => {
+        if (this._miniVisible && e.target.closest('.hdo-mini-player')) return;
         if (this._isUiTarget(e.target)) return;
         if (this._isControlsArea(e.target)) return;
 
@@ -727,11 +697,13 @@
           pendingSide = null;
           pendingCenter = false;
 
-          this._seekAccum = (this._seekAccum || 0) + (tapSide === 'left' ? -10 : 10);
           const dir = tapSide === 'left' ? -1 : 1;
-          this._showTapRipple(e.clientX - rect.left, e.clientY - rect.top);
+          const step = 10 * dir;
+          const before = this.video.currentTime;
+          const target = isNaN(this.video.duration) ? before : Math.max(0, Math.min(this.video.duration, before + step));
+          if (target !== before) this.video.currentTime = target;
+          this._seekAccum = (this._seekAccum || 0) + (target - before);
           this._showSeekIndicator(dir);
-          this._seekBy(10 * dir);
 
           lastTapTime = 0;
           return;
@@ -744,7 +716,6 @@
           pendingSide = null;
           pendingCenter = false;
 
-          this._showTapRipple(e.clientX - rect.left, e.clientY - rect.top);
           this._toggleFullscreen();
 
           lastTapTime = 0;
@@ -763,7 +734,6 @@
             singleTimer = setTimeout(() => {
               if (pendingCenter) {
                 pendingCenter = false;
-                this._showTapRipple(e.clientX - rect.left, e.clientY - rect.top);
                 this._showCenterIndicator(v.paused || v.ended);
                 this._togglePlay();
                 this._showControls(true);
@@ -877,45 +847,52 @@
       // PiP
       if (this.pipBtn) this.pipBtn.addEventListener('click', (e) => { e.stopPropagation(); this._togglePip(); });
 
-      // Loop button
-      if (this.loopBtn) {
-        this.loopBtn.addEventListener('click', (e) => { e.stopPropagation(); this._toggleLoop(); });
-      }
-
-      // Screenshot button
-      if (this.screenshotBtn) {
-        this.screenshotBtn.addEventListener('click', (e) => { e.stopPropagation(); this._screenshot(); });
-      }
-
-      // Menus
-      this.streamBtn.addEventListener('click', (e) => { e.stopPropagation(); this._toggleMenu(this.streamMenu); });
-      this.speedBtn.addEventListener('click', (e) => { e.stopPropagation(); this._toggleMenu(this.speedMenu); });
-
-      // Menu close buttons
-      this.container.querySelectorAll('.hdo-menu-close').forEach(btn => {
-        btn.addEventListener('click', (e) => { e.stopPropagation(); this._closeMenus(false); });
+      // YouTube-style settings (gear top-right)
+      this.ytGear.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this._toggleSettings();
+        this._showControls(true);
       });
 
-      // Click outside menu to close
+      // Settings nav items (open submenu)
+      this.ytSettings.querySelectorAll('.hdo-yt-item[data-sub]').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this._openSettings();
+          this._openSub(item.getAttribute('data-sub'));
+        });
+      });
+
+      // Loop toggle in settings
+      if (this.ytLoopItem) {
+        this.ytLoopItem.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this._toggleLoop();
+        });
+      }
+
+      // Screenshot in settings
+      if (this.ytShotItem) {
+        this.ytShotItem.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this._hideSettingsPanel();
+          this._screenshot();
+        });
+      }
+
+      // Submenu back buttons
+      this.ytSettings.querySelectorAll('.hdo-yt-back').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this._backToMain();
+        });
+      });
+
+      // Click outside settings to close
       container.addEventListener('click', (e) => {
-        if (this._isMenuOpen() && !e.target.closest('.hdo-menu') && !e.target.closest('.hdo-stream-btn') && !e.target.closest('.hdo-speed-btn')) {
-          this._closeMenus(false);
-        }
-        if (this.settingsPanel.classList.contains('open') && !e.target.closest('.hdo-settings-panel') && !e.target.closest('.hdo-stream-btn') && !e.target.closest('.hdo-speed-btn')) {
+        if (this._isSettingsOpen() && !e.target.closest('.hdo-yt-settings')) {
           this._hideSettingsPanel();
         }
-      });
-
-      // Settings panel close
-      this.settingsCloseBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this._hideSettingsPanel();
-      });
-
-      // Settings loop toggle
-      this.settingsLoopToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this._toggleLoop();
       });
 
       // Fullscreen change
@@ -936,7 +913,7 @@
           case 'ArrowDown': e.preventDefault(); this._changeVolume(-0.1); this._showControls(true); break;
           case 'm': case 'M': this._toggleMute(); break;
           case 'f': case 'F': this._toggleFullscreen(); break;
-          case 'Escape': if (this._isMenuOpen()) { this._closeMenus(false); e.preventDefault(); } else if (this.settingsPanel.classList.contains('open')) { this._hideSettingsPanel(); e.preventDefault(); } break;
+          case 'Escape': if (this._isSettingsOpen()) { this._hideSettingsPanel(); e.preventDefault(); } break;
           case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
             e.preventDefault(); this._seekToPercent(parseInt(e.key) * 10); this._showControls(true); break;
           case '[': e.preventDefault(); this._stepSpeed(-1); this._showControls(true); break;
@@ -989,7 +966,7 @@
     }
 
     _isUiTarget(el) {
-      return !!(el.closest('.hdo-btn') || el.closest('.hdo-seek') || el.closest('.hdo-vol-wrap') || el.closest('.hdo-progress') || el.closest('.hdo-big-play'));
+      return !!(el.closest('.hdo-btn') || el.closest('.hdo-yt-settings') || el.closest('.hdo-seek') || el.closest('.hdo-vol-wrap') || el.closest('.hdo-progress') || el.closest('.hdo-big-play'));
     }
 
     _isControlsArea(el) {
@@ -1011,17 +988,6 @@
     }
 
     // ============ TAP VISUAL FEEDBACK ============
-    _showTapRipple(x, y) {
-      if (!this.tapRipple) return;
-      this.tapRipple.style.left = x + 'px';
-      this.tapRipple.style.top = y + 'px';
-      this.tapRipple.classList.remove('animate');
-      void this.tapRipple.offsetHeight;
-      this.tapRipple.classList.add('animate');
-      clearTimeout(this._rippleTimer);
-      this._rippleTimer = setTimeout(() => this.tapRipple.classList.remove('animate'), 400);
-    }
-
     _showCenterIndicator(isPlay) {
       if (!this.centerIndicator) return;
       this.centerPlayIcon.style.display = isPlay ? '' : 'none';
@@ -1036,8 +1002,8 @@
     _showSeekIndicator(dir) {
       const ind = dir < 0 ? this.seekIndLeft : this.seekIndRight;
       const text = dir < 0 ? this.seekTextLeft : this.seekTextRight;
-      const abs = Math.abs(this._seekAccum || 10);
-      text.textContent = abs;
+      const v = this._seekAccum || 0;
+      text.textContent = (v > 0 ? '+' : '') + Math.round(v);
       ind.classList.remove('animate');
       void ind.offsetHeight;
       ind.classList.add('animate');
@@ -1084,9 +1050,8 @@
       if (save) {
         try { localStorage.setItem('hdo_player_speed', String(speed)); } catch (e) {}
       }
-      const items = this.speedMenu.querySelectorAll('.hdo-menu-item');
+      const items = this.ytSpeedList.querySelectorAll('.hdo-yt-list-item');
       items.forEach(it => it.classList.toggle('active', parseFloat(it.textContent) === speed));
-      this._buildSettingsPanel();
     }
 
     _seekBy(sec) {
@@ -1134,26 +1099,45 @@
       this.bufferBar.style.width = (end / v.duration * 100) + '%';
     }
 
-    // ============ MENUS (YouTube-like: don't pause video) ============
-    _toggleMenu(menu) {
-      const willOpen = !menu.classList.contains('open');
-      this._closeMenus(false);
-      this._hideSettingsPanel();
-      if (!willOpen) return;
-      menu.classList.add('open');
-      this._menuOpen = menu;
+    // ============ SETTINGS POPUP (YouTube-like: don't pause video) ============
+    _isSettingsOpen() {
+      return this.ytSettings.classList.contains('open');
+    }
+
+    _openSettings() {
+      this.ytSettings.classList.add('open');
+      this._buildQualityList();
+      this._buildSpeedList();
       clearTimeout(this._hideTimer);
     }
 
-    _closeMenus(resume) {
-      document.querySelectorAll('.hdo-menu.open').forEach(m => m.classList.remove('open'));
-      this._menuOpen = null;
+    _toggleSettings() {
+      if (this._isSettingsOpen()) {
+        this._hideSettingsPanel();
+      } else {
+        this._openSettings();
+      }
+    }
+
+    _openSub(name) {
+      this.ytSettings.querySelectorAll('.hdo-yt-panel-sub').forEach(p => p.classList.remove('active'));
+      const sub = this.ytSettings.querySelector('.hdo-yt-sub-' + name);
+      if (sub) sub.classList.add('active');
+      this.ytPanelMain.classList.add('hidden');
+    }
+
+    _backToMain() {
+      this.ytSettings.querySelectorAll('.hdo-yt-panel-sub').forEach(p => p.classList.remove('active'));
+      this.ytPanelMain.classList.remove('hidden');
+    }
+
+    _hideSettingsPanel() {
+      this.ytSettings.classList.remove('open');
+      this._backToMain();
       if (!this.video.paused) {
         this._resetHideTimer(true);
       }
     }
-
-    _isMenuOpen() { return !!this._menuOpen; }
 
     // ============ FULLSCREEN / PIP ============
     _fullscreenEnabled() {
@@ -1167,12 +1151,15 @@
         if (document.exitFullscreen) document.exitFullscreen();
         else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
       } else {
+        this._stopMiniPlayer();
+        this._showControls(true);
         const el = this.container;
         if (el.requestFullscreen) el.requestFullscreen();
         else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
       }
     }
     _updateFullIcon() {
+      if (this._isFullscreen()) this._stopMiniPlayer();
       if (!this.fullBtn) return;
       this.fullBtn.innerHTML = this._isFullscreen() ? ICONS.minimize : ICONS.maximize;
     }
@@ -1233,21 +1220,6 @@
       this._showToast(this._loop ? 'Lặp lại: Bật' : 'Lặp lại: Tắt');
     }
 
-    // ============ SETTINGS PANEL ============
-    _showSettingsPanel() {
-      this._closeMenus(false);
-      this._buildSettingsPanel();
-      this.settingsPanel.classList.add('open');
-      clearTimeout(this._hideTimer);
-    }
-
-    _hideSettingsPanel() {
-      this.settingsPanel.classList.remove('open');
-      if (!this.video.paused) {
-        this._resetHideTimer(true);
-      }
-    }
-
     // ============ LONG PRESS ============
     _initLongPress() {
       let longPressTimer = null;
@@ -1255,7 +1227,7 @@
       const v = this.video;
 
       const onStart = (e) => {
-        if (this._isUiTarget(e.target) || this._isControlsArea(e.target)) return;
+        if (this._isUiTarget(e.target) || this._isControlsArea(e.target) || this._miniVisible) return;
         longPressActive = false;
         longPressTimer = setTimeout(() => {
           longPressActive = true;
@@ -1313,6 +1285,7 @@
       const rect = this.container.getBoundingClientRect();
 
       const header = this.miniPlayer.querySelector('.hdo-mini-header');
+      const miniWrap = this.miniPlayer.querySelector('.hdo-mini-video-wrap');
       let isDragging = false;
       let dragOffsetX = 0;
       let dragOffsetY = 0;
@@ -1354,7 +1327,8 @@
 
       document.addEventListener('touchend', () => { isDragging = false; });
 
-      this.miniVideo.addEventListener('click', () => {
+      miniWrap.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (this._isFullscreen()) return;
         this._stopMiniPlayer();
         this.container.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1416,7 +1390,11 @@
       this.miniPlayer.style.bottom = '12px';
       this.miniPlayer.style.left = 'auto';
       this.miniPlayer.style.top = 'auto';
-      this._syncMiniVideo();
+      const wrap = this.miniPlayer.querySelector('.hdo-mini-video-wrap');
+      if (this.video.parentElement !== wrap) {
+        wrap.appendChild(this.video);
+      }
+      this._syncMiniPlayerUi();
       this._startMiniHideTimer();
     }
 
@@ -1426,23 +1404,25 @@
       this.miniPlayer.style.display = 'none';
       this.miniPlayer.classList.remove('auto-hide');
       clearTimeout(this._miniHideTimer);
-      if (this.miniVideo.src) {
-        this.miniVideo.src = '';
-        this.miniVideo.load();
+      const wrap = this.miniPlayer.querySelector('.hdo-mini-video-wrap');
+      if (wrap && this.video.parentElement === wrap) {
+        this.container.insertBefore(this.video, this.container.firstChild);
       }
     }
 
     _syncMiniVideo() {
       if (!this._miniVisible) return;
-      if (this.miniVideo.src !== this.video.currentSrc && this.video.currentSrc) {
-        this.miniVideo.src = this.video.currentSrc;
-        this.miniVideo.currentTime = this.video.currentTime;
+      const wrap = this.miniPlayer.querySelector('.hdo-mini-video-wrap');
+      if (wrap && this.video.parentElement !== wrap) {
+        wrap.appendChild(this.video);
       }
+      this._syncMiniPlayerUi();
+    }
+
+    _syncMiniPlayerUi() {
       if (this.video.paused) {
-        this.miniVideo.pause();
         this.miniPlayBtn.innerHTML = ICONS.play;
       } else {
-        this.miniVideo.play().catch(() => {});
         this.miniPlayBtn.innerHTML = ICONS.pause;
       }
     }
@@ -1587,6 +1567,7 @@
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   .hdo-video {
     position: absolute;
@@ -1631,29 +1612,6 @@
   .hdo-big-play.show { display: flex; }
   .hdo-big-play svg { width: 32px; height: 32px; }
   .hdo-big-play.show svg { margin-left: 4px; }
-
-  /* Tap ripple */
-  .hdo-tap-ripple {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    margin-left: -30px;
-    margin-top: -30px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.25);
-    transform: scale(0);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 7;
-  }
-  .hdo-tap-ripple.animate {
-    animation: hdo-ripple 0.4s ease-out forwards;
-  }
-  @keyframes hdo-ripple {
-    0% { transform: scale(0); opacity: 0.5; }
-    50% { opacity: 0.3; }
-    100% { transform: scale(3); opacity: 0; }
-  }
 
   /* Center play/pause indicator */
   .hdo-center-indicator {
@@ -1774,7 +1732,6 @@
     background: linear-gradient(transparent, rgba(0,0,0,.8));
     padding: 14px 12px 8px;
     opacity: 0;
-    transition: opacity .3s ease;
     z-index: 5;
     overflow: visible;
     container-type: inline-size;
@@ -1894,21 +1851,125 @@
     text-overflow: ellipsis;
     max-width: 36px;
   }
-  .hdo-btn.hdo-stream-btn,
-  .hdo-btn.hdo-speed-btn {
-    width: auto;
-    min-width: 0;
-    padding: 0 8px;
-    gap: 2px;
-    border-radius: 6px;
-    flex-shrink: 1;
-    overflow: hidden;
-  }
-  .hdo-btn.hdo-loop-btn.active-loop {
-    color: #e50914;
-  }
-
   .hdo-time { font-size: 13px; color: #fff; margin-left: 6px; font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 1; min-width: 0; overflow: hidden; }
+
+  /* YouTube-style settings popup (gear top-right) */
+  .hdo-yt-settings {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 12;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .hdo-player.controls-show .hdo-yt-settings,
+  .hdo-yt-settings.open { opacity: 1; pointer-events: auto; }
+  .hdo-yt-gear {
+    background: transparent;
+    border: none;
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background .15s;
+    margin: 8px 8px 0 0;
+  }
+  .hdo-yt-gear:hover { background: rgba(255,255,255,.15); }
+  .hdo-yt-gear svg { width: 22px; height: 22px; }
+  .hdo-yt-panel {
+    position: absolute;
+    top: 8px;
+    right: 52px;
+    width: 210px;
+    background: rgba(28, 28, 28, .96);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.6);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+    max-height: min(60vh, 400px);
+    overflow-y: auto;
+  }
+  .hdo-yt-settings.open .hdo-yt-panel-main:not(.hidden) { opacity: 1; transform: none; pointer-events: auto; }
+  .hdo-yt-settings.open .hdo-yt-panel-sub.active { opacity: 1; transform: none; pointer-events: auto; }
+  .hdo-yt-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 10px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    position: sticky;
+    top: 0;
+    background: rgba(28,28,28,.98);
+    z-index: 1;
+  }
+  .hdo-yt-title { font-size: 13px; font-weight: 700; color: #fff; }
+  .hdo-yt-back {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background .15s;
+  }
+  .hdo-yt-back:hover { background: rgba(255,255,255,.15); }
+  .hdo-yt-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 14px;
+    background: none;
+    border: none;
+    color: #ddd;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .1s;
+  }
+  .hdo-yt-item:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .hdo-yt-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .hdo-yt-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    white-space: nowrap;
+  }
+  .hdo-yt-value { font-size: 12px; font-weight: 600; color: #aaa; margin-left: auto; white-space: nowrap; }
+  .hdo-yt-chev { color: #888; font-size: 16px; flex-shrink: 0; }
+  .hdo-yt-check { color: #e50914; font-size: 15px; font-weight: 700; min-width: 16px; text-align: right; }
+  .hdo-yt-divider { height: 1px; background: rgba(255,255,255,.08); margin: 4px 10px; }
+  .hdo-yt-list { padding: 6px 0; }
+  .hdo-yt-list-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    color: #ddd;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .1s;
+  }
+  .hdo-yt-list-item:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .hdo-yt-list-item.active { color: #e50914; font-weight: 700; }
+  .hdo-yt-list-item.active::after { content: '\\2713'; margin-left: 8px; }
 
   /* Volume */
   .hdo-vol-wrap { position: relative; display: flex; align-items: center; flex-shrink: 0; }
@@ -1939,160 +2000,6 @@
     margin: 0;
   }
   .hdo-vol-fill { position: absolute; bottom: 14px; width: 22px; background: #e50914; pointer-events: none; }
-
-  /* Menus (YouTube-style overlay) */
-  .hdo-menu {
-    position: absolute;
-    bottom: 64px;
-    right: 10px;
-    background: rgba(28, 28, 28, .96);
-    border-radius: 12px;
-    padding: 0;
-    min-width: 140px;
-    max-width: 80%;
-    z-index: 10;
-    opacity: 0;
-    transform: translateY(12px) scale(.95);
-    pointer-events: none;
-    transition: opacity .2s ease, transform .2s ease;
-    box-shadow: 0 8px 32px rgba(0,0,0,.6);
-    overflow: hidden;
-  }
-  .hdo-menu.open { opacity: 1; transform: none; pointer-events: auto; }
-  .hdo-menu-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px 6px;
-    border-bottom: 1px solid rgba(255,255,255,.1);
-  }
-  .hdo-menu-title { font-size: 12px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: .5px; }
-  .hdo-menu-close {
-    background: none;
-    border: none;
-    color: #aaa;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: background .15s;
-  }
-  .hdo-menu-close:hover { background: rgba(255,255,255,.15); color: #fff; }
-  .hdo-menu-close svg { width: 16px; height: 16px; }
-  .hdo-menu-list { max-height: 220px; overflow-y: auto; padding: 4px 0; }
-  .hdo-menu-list::-webkit-scrollbar { width: 3px; }
-  .hdo-menu-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 10px; }
-  .hdo-menu-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    text-align: left;
-    padding: 8px 14px;
-    background: transparent;
-    border: none;
-    color: #ddd;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background .1s;
-  }
-  .hdo-menu-item:hover { background: rgba(255,255,255,.1); color: #fff; }
-  .hdo-menu-item.active { color: #e50914; font-weight: 700; }
-  .hdo-menu-item.active::after { content: '\\2713'; margin-left: 8px; }
-
-  /* Settings panel */
-  .hdo-settings-panel {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(28, 28, 28, .97);
-    border-radius: 12px 12px 0 0;
-    z-index: 12;
-    opacity: 0;
-    transform: translateY(100%);
-    pointer-events: none;
-    transition: opacity .25s ease, transform .25s ease;
-    max-height: 60%;
-    overflow-y: auto;
-    box-shadow: 0 -4px 24px rgba(0,0,0,.6);
-  }
-  .hdo-settings-panel.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .hdo-settings-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    border-bottom: 1px solid rgba(255,255,255,.1);
-  }
-  .hdo-settings-title { font-size: 14px; font-weight: 700; color: #fff; }
-  .hdo-settings-close {
-    background: none;
-    border: none;
-    color: #aaa;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: background .15s;
-  }
-  .hdo-settings-close:hover { background: rgba(255,255,255,.15); color: #fff; }
-  .hdo-settings-close svg { width: 18px; height: 18px; }
-  .hdo-settings-section {
-    padding: 8px 16px;
-  }
-  .hdo-settings-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #aaa;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-    margin-bottom: 6px;
-  }
-  .hdo-settings-speed-list,
-  .hdo-settings-quality-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .hdo-settings-item {
-    padding: 6px 12px;
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: 6px;
-    color: #ddd;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all .15s;
-  }
-  .hdo-settings-item:hover { background: rgba(255,255,255,.15); color: #fff; }
-  .hdo-settings-item.active { background: rgba(229,9,20,.2); border-color: #e50914; color: #e50914; font-weight: 700; }
-  .hdo-settings-loop-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 10px 0;
-    background: none;
-    border: none;
-    color: #ddd;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .hdo-settings-loop-toggle:hover { color: #fff; }
-  .hdo-settings-loop-check {
-    color: #e50914;
-    font-size: 16px;
-    font-weight: 700;
-    min-width: 20px;
-    text-align: right;
-  }
 
   /* Network speed badge */
   .hdo-net-speed {
@@ -2247,14 +2154,6 @@
     background: #000;
     cursor: pointer;
   }
-  .hdo-mini-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #000;
-  }
 
   /* Container query: scale controls for small player */
   @container hdo-controls (max-width: 280px) {
@@ -2262,8 +2161,6 @@
     .hdo-controls-bar { gap: 2px; margin-top: 2px; }
     .hdo-btn { width: 26px; height: 26px; }
     .hdo-btn svg { width: 16px; height: 16px; }
-    .hdo-btn.hdo-stream-btn,
-    .hdo-btn.hdo-speed-btn { padding: 0 4px; gap: 1px; }
     .hdo-btn-label { font-size: 9px; margin-left: 1px; max-width: 28px; }
     .hdo-time { font-size: 10px; margin-left: 3px; }
     .hdo-bar-left,
@@ -2274,14 +2171,16 @@
     .hdo-spinner { width: 36px; height: 36px; }
     .hdo-vol-slider { width: 32px; height: 80px; }
     .hdo-vol-input { height: 60px; }
+    .hdo-yt-settings { top: 4px; right: 4px; }
+    .hdo-yt-gear { width: 30px; height: 30px; margin: 4px 4px 0 0; }
+    .hdo-yt-gear svg { width: 18px; height: 18px; }
+    .hdo-yt-panel { right: 40px; width: 180px; top: 6px; }
   }
   @container hdo-controls (max-width: 200px) {
     .hdo-controls { padding: 4px 3px 3px; }
     .hdo-controls-bar { gap: 1px; margin-top: 1px; }
     .hdo-btn { width: 22px; height: 22px; border-radius: 4px; }
     .hdo-btn svg { width: 13px; height: 13px; }
-    .hdo-btn.hdo-stream-btn,
-    .hdo-btn.hdo-speed-btn { padding: 0 3px; border-radius: 3px; }
     .hdo-btn-label { font-size: 8px; margin-left: 0; max-width: 22px; }
     .hdo-time { font-size: 9px; margin-left: 2px; }
     .hdo-progress { height: 14px; }
@@ -2290,11 +2189,12 @@
     .hdo-seek-ico svg { width: 16px; height: 16px; }
     .hdo-seek-text { font-size: 14px; min-width: 16px; }
     .hdo-spinner { width: 28px; height: 28px; }
-    .hdo-menu { min-width: 110px; bottom: 48px; }
-    .hdo-menu-item { padding: 6px 10px; font-size: 11px; }
-    .hdo-menu-title { font-size: 10px; }
     .hdo-vol-slider { width: 28px; height: 70px; }
     .hdo-vol-input { height: 50px; }
+    .hdo-yt-settings { top: 2px; right: 2px; }
+    .hdo-yt-gear { width: 26px; height: 26px; margin: 2px 2px 0 0; }
+    .hdo-yt-gear svg { width: 15px; height: 15px; }
+    .hdo-yt-panel { right: 34px; width: 160px; top: 4px; }
   }
 
   @media (max-width: 640px) {
