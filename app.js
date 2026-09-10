@@ -347,7 +347,7 @@
                 }
             }
 
-            async function viewCatalog(endpointUrl, fallbackTitle, hashPrefix) {
+            async function viewCatalog(endpointUrl, fallbackTitle, hashPrefix, extraKeyword = null) {
                 showSkeleton("list");
                 updatePageTitle(fallbackTitle + ' - HDOphim');
                 try {
@@ -357,6 +357,31 @@
                     const pagination = data.params?.pagination || data.pagination;
                     const title = data.titlePage || res?.titlePage || fallbackTitle;
 
+                    let extraSection = '';
+                    if (extraKeyword) {
+                        const kw = String(extraKeyword).trim();
+                        try {
+                            const sres = await fetch(`${API_BASE}/v1/api/tim-kiem?keyword=${encodeURIComponent(kw)}&page=1`).then(r => r.json());
+                            const sdata = sres?.data || {};
+                            const sitems = sdata.items || [];
+                            if (sitems.length > 0) {
+                                const shown = sitems.slice(0, 12);
+                                extraSection = `
+                                    <div class="space-y-3 md:space-y-4">
+                                        <div class="flex items-center justify-between">
+                                            <h2 class="section-title font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                                <i data-lucide="search" class="w-5 h-5 md:w-6 md:h-6 text-brand"></i> Phim có tên "${kw}"
+                                            </h2>
+                                            <a href="#/tim-kiem?keyword=${encodeURIComponent(kw)}" class="text-sm sm:text-base text-brand hover:underline font-medium flex items-center gap-1">Xem tất cả <i data-lucide="arrow-right" class="w-3 h-3 sm:w-4 sm:h-4"></i></a>
+                                        </div>
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+                                            ${shown.map(renderMovieCard).join('')}
+                                        </div>
+                                    </div>`;
+                            }
+                        } catch (e) { }
+                    }
+
                     const html = `
                             <div class="space-y-4 md:space-y-6 animate-fade-in">
                                 <div class="flex items-center gap-2 text-sm sm:text-base text-gray-500 dark:text-slate-400">
@@ -364,6 +389,7 @@
                                     <i data-lucide="chevron-right" class="w-3 h-3 text-gray-400 dark:text-slate-600"></i>
                                     <h1 class="section-title font-bold text-gray-900 dark:text-white">${title}</h1>
                                 </div>
+                                ${extraSection}
                                 ${items.length === 0 ? '<p class="text-gray-500 dark:text-slate-400 py-20 text-center">Không tìm thấy phim nào.</p>' : `
                                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
                                         ${items.map(renderMovieCard).join('')}
@@ -755,8 +781,11 @@
                         `#/quoc-gia/${subRoute}?`);
 
                 } else if (route === 'nam') {
+                    const curY = new Date().getFullYear();
+                    const extraKw = /^\d{4}$/.test(subRoute) && parseInt(subRoute, 10) >= 1900 && parseInt(subRoute, 10) <= curY
+                        ? subRoute : null;
                     await viewCatalog(`${API_BASE}/v1/api/nam/${subRoute}?page=${page}`, `Phim năm ${subRoute}`,
-                        `#/nam/${subRoute}?`);
+                        `#/nam/${subRoute}?`, extraKw);
 
                 } else if (route === 'tim-kiem') {
                     const kw = (queryParams.keyword || '').trim();
