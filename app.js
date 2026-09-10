@@ -788,16 +788,7 @@
                         `#/nam/${subRoute}?`, extraKw);
 
                 } else if (route === 'tim-kiem') {
-                    const kw = (queryParams.keyword || '').trim();
-                    const curYear = new Date().getFullYear();
-                    const year = /^\d{4}$/.test(kw) && parseInt(kw, 10) >= 1900 && parseInt(kw, 10) <= curYear
-                        ? parseInt(kw, 10) : null;
-                    if (year) {
-                        await viewCatalog(`${API_BASE}/v1/api/nam/${year}?page=${page}`, `Phim năm ${year}`,
-                            `#/nam/${year}?`);
-                    } else {
-                        await viewSearch(kw, page);
-                    }
+                    await viewSearch(queryParams.keyword || '', page);
                 } else if (route === 'phim') {
                     await viewMovieDetail(subRoute, queryParams);
                 } else {
@@ -817,22 +808,32 @@
                 ];
                 searchForms.forEach(({ formId, inputId }) => {
                     const form = document.getElementById(formId);
-                    if (form) {
-                        form.addEventListener('submit', (e) => {
-                            e.preventDefault();
-                            const kw = document.getElementById(inputId).value.trim();
-                            if (!kw) return;
-                            const curYear = new Date().getFullYear();
-                            const year = /^\d{4}$/.test(kw) && parseInt(kw, 10) >= 1900 && parseInt(kw, 10) <= curYear
-                                ? parseInt(kw, 10) : null;
-                            if (year) {
-                                window.location.hash = `#/nam/${year}`;
-                            } else {
-                                window.location.hash = `#/tim-kiem?keyword=${encodeURIComponent(kw)}`;
-                            }
-                            closeMobileMenu();
-                        });
-                    }
+                    if (!form) return;
+                    const input = document.getElementById(inputId);
+                    const btnPhim = form.querySelector('[data-mode="phim"]');
+                    const btnNam = form.querySelector('[data-mode="nam"]');
+                    let mode = 'phim';
+                    const curYear = new Date().getFullYear();
+                    const setMode = (m) => {
+                        mode = m;
+                        if (btnPhim) btnPhim.classList.toggle('active', m === 'phim');
+                        if (btnNam) btnNam.classList.toggle('active', m === 'nam');
+                        input.placeholder = m === 'nam' ? 'Nhập năm (vd 2000)' : 'Tìm phim...';
+                    };
+                    if (btnPhim) btnPhim.addEventListener('click', () => setMode('phim'));
+                    if (btnNam) btnNam.addEventListener('click', () => setMode('nam'));
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const kw = input.value.trim();
+                        if (!kw) return;
+                        const isYear = /^\d{4}$/.test(kw) && parseInt(kw, 10) >= 1900 && parseInt(kw, 10) <= curYear;
+                        if (mode === 'nam' && isYear) {
+                            window.location.hash = `#/nam/${kw}`;
+                        } else {
+                            window.location.hash = `#/tim-kiem?keyword=${encodeURIComponent(kw)}`;
+                        }
+                        closeMobileMenu();
+                    });
                 });
 
                 const menuBtn = document.getElementById('mobile-menu-btn');
