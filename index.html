@@ -69,26 +69,8 @@
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-    <!-- HLS.js (cho player) - tải kèm CDN dự phòng -->
-    <script>
-        (function() {
-            var urls = [
-                'https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js',
-                'https://unpkg.com/hls.js@1/dist/hls.min.js',
-                'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.17/hls.min.js'
-            ];
-            var i = 0;
-            (function next() {
-                if (window.Hls && Hls.isSupported()) return;
-                if (i >= urls.length) return;
-                var s = document.createElement('script');
-                s.src = urls[i++];
-                s.onload = next;
-                s.onerror = next;
-                document.head.appendChild(s);
-            })();
-        })();
-    </script>
+    <!-- HLS.js (cho player) - tự lưu local, không phụ thuộc CDN -->
+    <script src="./hls.min.js"></script>
     <!-- Player HDO -->
     <script src="./player.js"></script>
 

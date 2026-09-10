@@ -389,21 +389,7 @@
 
     _ensureHls(cb) {
       if (window.Hls) { cb && cb(true); return; }
-      const sources = [
-        'https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js',
-        'https://unpkg.com/hls.js@1/dist/hls.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.17/hls.min.js'
-      ];
-      const tryNext = (i) => {
-        if (i >= sources.length) { cb && cb(false); return; }
-        if (window.Hls) { cb && cb(true); return; }
-        const s = document.createElement('script');
-        s.src = sources[i];
-        s.onload = () => { cb && cb(!!window.Hls); };
-        s.onerror = () => tryNext(i + 1);
-        document.head.appendChild(s);
-      };
-      tryNext(0);
+      cb && cb(false);
     }
 
     _newHls() {
