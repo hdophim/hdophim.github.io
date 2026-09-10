@@ -783,12 +783,17 @@
                     const chip = form.querySelector('.search-mode-chip');
                     const label = form.querySelector('.search-mode-label');
                     let mode = 'phim';
+                    try {
+                        mode = localStorage.getItem('hdo_search_mode') === 'nam' ? 'nam' : 'phim';
+                    } catch (e) { }
                     const curYear = new Date().getFullYear();
                     const setMode = (m) => {
                         mode = m;
                         if (label) label.textContent = m === 'nam' ? 'Năm' : 'Phim';
                         input.placeholder = m === 'nam' ? 'Nhập năm (vd 2000)' : 'Tìm phim...';
+                        try { localStorage.setItem('hdo_search_mode', m); } catch (e) { }
                     };
+                    setMode(mode);
                     if (chip) chip.addEventListener('click', () => setMode(mode === 'phim' ? 'nam' : 'phim'));
                     form.addEventListener('submit', (e) => {
                         e.preventDefault();
