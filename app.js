@@ -120,16 +120,75 @@
                 }
             }
 
-            function showSkeleton() {
-                const skeletonHtml = `
+            function skeletonPosterGrid(count) {
+                return `<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+                            ${Array(count || 12).fill('<div class="aspect-[2/3] skeleton rounded-xl"></div>').join('')}
+                        </div>`;
+            }
+
+            function showSkeleton(kind = 'home') {
+                const grid = skeletonPosterGrid(12);
+                const pagination = `
+                        <div class="flex justify-center gap-2 mt-8 md:mt-10 animate-pulse">
+                            ${'<div class="skeleton w-20 h-9 rounded-lg"></div>'.repeat(4)}
+                        </div>`;
+                const breadcrumb = `
+                        <div class="flex items-center gap-2 animate-pulse">
+                            <div class="skeleton w-5 h-5 rounded-md"></div>
+                            <div class="skeleton w-3 h-3 rounded-full"></div>
+                            <div class="skeleton w-28 h-5 rounded-md"></div>
+                        </div>`;
+
+                let html;
+                if (kind === 'home') {
+                    html = `
                         <div class="space-y-8 animate-pulse">
                             <div class="skeleton h-56 md:h-80 lg:h-96 rounded-2xl"></div>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-5">
-                                ${Array(12).fill('<div class="aspect-[2/3] skeleton rounded-xl"></div>').join('')}
+                            <div class="flex items-center justify-between animate-pulse">
+                                <div class="skeleton h-6 md:h-7 w-48 rounded-lg"></div>
+                                <div class="skeleton h-5 w-24 rounded-md"></div>
                             </div>
-                        </div>
-                    `;
-                renderContent(skeletonHtml);
+                            ${grid}
+                        </div>`;
+                } else if (kind === 'detail') {
+                    html = `
+                        <div class="space-y-4 md:space-y-8 animate-pulse">
+                            ${breadcrumb}
+                            <div class="skeleton aspect-video w-full rounded-xl md:rounded-2xl"></div>
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+                                <div class="lg:col-span-2 space-y-4 md:space-y-6">
+                                    <div class="skeleton h-8 w-32 md:w-40 rounded-lg"></div>
+                                    <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1.5 sm:gap-2">
+                                        ${Array(16).fill('<div class="skeleton h-9 rounded-lg" style="height:34px"></div>').join('')}
+                                    </div>
+                                    <div class="space-y-2">
+                                        ${Array(4).fill('<div class="skeleton rounded-md"></div>').join('')}
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    ${Array(3).fill(`
+                                        <div class="flex gap-3 animate-pulse">
+                                            <div class="skeleton w-16 sm:w-20 aspect-[2/3] rounded-lg shrink-0"></div>
+                                            <div class="flex-1 space-y-2 py-1">
+                                                <div class="skeleton h-4 w-3/4 rounded-md"></div>
+                                                <div class="skeleton h-3 w-1/2 rounded-md"></div>
+                                            </div>
+                                        </div>`).join('')}
+                                </div>
+                            </div>
+                        </div>`;
+                } else {
+                    const heading = kind === 'search'
+                        ? `<div class="skeleton h-6 sm:h-7 w-52 md:w-64 rounded-lg"></div>`
+                        : breadcrumb + `<div class="skeleton h-7 w-40 md:w-48 rounded-lg"></div>`;
+                    html = `
+                        <div class="space-y-4 md:space-y-6 animate-pulse">
+                            ${heading}
+                            ${grid}
+                            ${pagination}
+                        </div>`;
+                }
+                renderContent(html);
             }
 
             function renderPagination(pagination, hashPrefix) {
@@ -239,7 +298,7 @@
             }
 
             async function viewHome() {
-                showSkeleton();
+                showSkeleton("home");
                 updatePageTitle('Trang chủ - HDOphim');
                 try {
                     const res = await fetch(`${API_BASE}/v1/api/home`).then(r => r.json());
@@ -303,7 +362,7 @@
             }
 
             async function viewCatalog(endpointUrl, fallbackTitle, hashPrefix) {
-                showSkeleton();
+                showSkeleton("list");
                 updatePageTitle(fallbackTitle + ' - HDOphim');
                 try {
                     const res = await fetch(endpointUrl).then(r => r.json());
@@ -334,7 +393,7 @@
             }
 
             async function viewSearch(keyword, page = 1) {
-                showSkeleton();
+                showSkeleton("search");
                 updatePageTitle('Tìm kiếm: ' + keyword + ' - HDOphim');
                 try {
                     const res = await fetch(
@@ -471,7 +530,7 @@
 
             async function viewMovieDetail(slug, queryParams) {
                 if (!cachedMovieData || cachedMovieData.movie?.slug !== slug) {
-                    showSkeleton();
+                    showSkeleton("detail");
                     updatePageTitle('Đang tải phim... - HDOphim');
                     try {
                         const res = await fetch(`${API_BASE}/phim/${slug}`).then(r => r.json());
