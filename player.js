@@ -591,6 +591,7 @@
         this.bigPlay.classList.remove('show');
         this.posterEl.style.display = 'none';
         this._scheduleHide();
+        this._syncCenterIndicator();
         if (this.netSpeedEl) this.netSpeedEl.style.display = '';
       };
       this._onPause = () => {
@@ -600,6 +601,7 @@
           this.bigPlay.innerHTML = ICONS.replay;
           this.bigPlay.classList.add('show');
         }
+        this._syncCenterIndicator();
         if (this.netSpeedEl) this.netSpeedEl.style.display = 'none';
         this._stopMiniPlayer();
       };
@@ -608,6 +610,7 @@
         this.bigPlay.innerHTML = ICONS.replay;
         this.bigPlay.classList.add('show');
         this._showControls(false);
+        this._syncCenterIndicator();
         if (this.netSpeedEl) this.netSpeedEl.style.display = 'none';
         this._stopMiniPlayer();
       };
@@ -638,19 +641,25 @@
       this._hideTimer = null;
 
       this._showControls = (autoHide) => {
+        const wasHidden = !container.classList.contains('controls-show');
         container.classList.add('controls-show');
+        if (wasHidden) this._syncCenterIndicator();
         this._resetHideTimer(autoHide !== false);
       };
 
       this._hideControls = () => {
         container.classList.remove('controls-show');
+        if (this.centerIndicator) this.centerIndicator.classList.remove('animate');
         clearTimeout(this._hideTimer);
       };
 
       this._resetHideTimer = (shouldHide) => {
         clearTimeout(this._hideTimer);
+        this._hideTimer = null;
         if (shouldHide && !v.paused && !v.ended && !this._isSettingsOpen()) {
-          this._hideTimer = setTimeout(() => this._hideControls(), this._autoHideDelay);
+          this._hideTimer = setTimeout(() => {
+            if (!v.paused && !v.ended && !this._isSettingsOpen()) this._hideControls();
+          }, this._autoHideDelay);
         }
       };
 
@@ -668,13 +677,26 @@
 
       // ============ TAP / CLICK HANDLER (YouTube-like) ============
       let lastTapTime = 0;
-      let lastTapX = 0;
       let lastTapSide = null;
+      let gestureWillShow = null;
       let singleTimer = null;
-      let pendingSide = null;
-      let pendingCenter = false;
+
+      const DOUBLE_TAP_WINDOW = 300;
+
+      let isTouchGesture = false;
+      const captureWillShow = () => {
+        gestureWillShow = !container.classList.contains('controls-show');
+      };
+      container.addEventListener('touchstart', () => {
+        isTouchGesture = true;
+        captureWillShow();
+      }, { passive: true });
+      container.addEventListener('mousedown', () => {
+        if (!isTouchGesture) captureWillShow();
+      });
 
       container.addEventListener('click', (e) => {
+        isTouchGesture = false;
         if (this._miniVisible && e.target.closest('.hdo-mini-player')) return;
         if (this._isUiTarget(e.target)) return;
         if (this._isControlsArea(e.target)) return;
@@ -683,90 +705,46 @@
         if (!rect.width || !rect.height) return;
 
         const relX = (e.clientX - rect.left) / rect.width;
-        const relY = (e.clientY - rect.top) / rect.height;
         const now = Date.now();
         const tapSide = relX < 0.35 ? 'left' : relX > 0.65 ? 'right' : 'center';
-        const isCenter = tapSide === 'center';
 
-        const DOUBLE_TAP_WINDOW = 300;
-
-        if (now - lastTapTime < DOUBLE_TAP_WINDOW && lastTapSide === tapSide && !isCenter) {
-          // Double-tap on edge -> seek ±10s
+        if (now - lastTapTime < DOUBLE_TAP_WINDOW && lastTapSide === tapSide) {
           clearTimeout(singleTimer);
           singleTimer = null;
-          pendingSide = null;
-          pendingCenter = false;
-
-          const dir = tapSide === 'left' ? -1 : 1;
-          const step = 10 * dir;
-          const before = this.video.currentTime;
-          const target = isNaN(this.video.duration) ? before : Math.max(0, Math.min(this.video.duration, before + step));
-          if (target !== before) this.video.currentTime = target;
-          this._seekAccum = (this._seekAccum || 0) + (target - before);
-          this._showSeekIndicator(dir);
-
           lastTapTime = 0;
+          lastTapSide = null;
+          if (tapSide === 'center') {
+            this._toggleFullscreen();
+          } else {
+            const dir = tapSide === 'left' ? -1 : 1;
+            const step = 10 * dir;
+            const before = this.video.currentTime;
+            const target = isNaN(this.video.duration) ? before : Math.max(0, Math.min(this.video.duration, before + step));
+            if (target !== before) this.video.currentTime = target;
+            this._seekAccum = (this._seekAccum || 0) + (target - before);
+            this._showSeekIndicator(dir);
+          }
           return;
         }
 
-        if (now - lastTapTime < DOUBLE_TAP_WINDOW && lastTapSide === tapSide && isCenter) {
-          // Double-tap on center -> toggle fullscreen
-          clearTimeout(singleTimer);
+        clearTimeout(singleTimer);
+        const willShow = gestureWillShow == null ? !container.classList.contains('controls-show') : gestureWillShow;
+        singleTimer = setTimeout(() => {
           singleTimer = null;
-          pendingSide = null;
-          pendingCenter = false;
-
-          this._toggleFullscreen();
-
-          lastTapTime = 0;
-          return;
-        }
-
-        if (isCenter) {
-          // Center area: single tap -> play/pause after delay (to check for double-tap)
-          clearTimeout(singleTimer);
-          singleTimer = null;
-
-          if (pendingCenter) {
-            pendingCenter = false;
+          if (willShow) {
+            this._showControls(true);
           } else {
-            pendingCenter = true;
-            singleTimer = setTimeout(() => {
-              if (pendingCenter) {
-                pendingCenter = false;
-                this._showCenterIndicator(v.paused || v.ended);
-                this._togglePlay();
-                this._showControls(true);
-              }
-              singleTimer = null;
-            }, DOUBLE_TAP_WINDOW);
+            this._hideControls();
           }
-        } else {
-          // Edge area: single tap -> show/hide controls
-          clearTimeout(singleTimer);
-          singleTimer = null;
-
-          if (pendingSide) {
-            pendingSide = null;
-          } else {
-            pendingSide = true;
-            singleTimer = setTimeout(() => {
-              if (pendingSide) {
-                pendingSide = false;
-                this._showControls(true);
-              }
-              singleTimer = null;
-            }, DOUBLE_TAP_WINDOW);
-          }
-        }
+        }, DOUBLE_TAP_WINDOW);
 
         lastTapTime = now;
-        lastTapX = e.clientX;
         lastTapSide = tapSide;
       });
 
       // Big play button
       this.bigPlay.addEventListener('click', (e) => { e.stopPropagation(); this._togglePlay(); });
+      this.centerIndicator.addEventListener('click', (e) => { e.stopPropagation(); this._togglePlay(); });
 
       // Error retry
       const retryBtn = this.container.querySelector('.hdo-error-retry');
@@ -992,11 +970,16 @@
       if (!this.centerIndicator) return;
       this.centerPlayIcon.style.display = isPlay ? '' : 'none';
       this.centerPauseIcon.style.display = isPlay ? 'none' : '';
-      this.centerIndicator.classList.remove('animate');
-      void this.centerIndicator.offsetHeight;
       this.centerIndicator.classList.add('animate');
-      clearTimeout(this._centerTimer);
-      this._centerTimer = setTimeout(() => this.centerIndicator.classList.remove('animate'), 500);
+    }
+
+    _syncCenterIndicator() {
+      if (!this.centerIndicator) return;
+      if (this.container.classList.contains('controls-show')) {
+        this._showCenterIndicator(this.video.paused || this.video.ended);
+      } else {
+        this.centerIndicator.classList.remove('animate');
+      }
     }
 
     _showSeekIndicator(dir) {
@@ -1631,7 +1614,8 @@
   }
   .hdo-center-indicator.animate {
     display: flex;
-    animation: hdo-center-pop 0.5s ease-out forwards;
+    pointer-events: auto;
+    animation: hdo-center-pop 0.35s ease-out;
   }
   .hdo-center-icon {
     position: absolute;
@@ -1646,8 +1630,8 @@
   @keyframes hdo-center-pop {
     0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
     30% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-    50% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+    60% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
   }
 
   /* Seek indicators (YouTube-style, left/right positioned) */
