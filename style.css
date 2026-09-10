@@ -135,3 +135,84 @@
         .search-input { font-size: clamp(0.85rem, 1.2vw, 1rem); }
         .search-mode-chip { pointer-events: auto; }
         .back-to-top { font-size: 1rem; }
+
+        /* ===== Cross-device hardening ===== */
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+        html, body {
+            overscroll-behavior-y: none;
+        }
+        @supports (overflow-x: clip) {
+            html, body {
+                overflow-x: clip !important;
+            }
+        }
+
+        .overflow-hidden {
+            overflow: hidden;
+        }
+
+        .search-bar { top: 3.5rem; }
+        @media (min-width: 768px) { .search-bar { top: 4rem; } }
+
+        #mobile-menu {
+            max-height: 80vh;
+        }
+        @supports (height: 100dvh) {
+            #mobile-menu { max-height: 80dvh; }
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+        :focus-visible {
+            outline: 2px solid #e50914;
+            outline-offset: 2px;
+        }
+        .dark :focus-visible {
+            outline-color: #ff1a25;
+        }
+
+        /* Vùng an toàn: tai thỏ/thanh navigation (viewport-fit=cover) */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            header {
+                padding-top: env(safe-area-inset-top);
+            }
+            .search-bar {
+                top: calc(3.5rem + env(safe-area-inset-top));
+            }
+            footer {
+                padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+            }
+            @media (min-width: 768px) {
+                .search-bar {
+                    top: calc(4rem + env(safe-area-inset-top));
+                }
+                footer {
+                    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+                }
+            }
+            .back-to-top {
+                bottom: calc(1.5rem + env(safe-area-inset-bottom));
+            }
+        }
+
+        /* Hero dựng đứng: to hơn trên điện thoại dọc */
+        @media (max-width: 640px) and (orientation: portrait) {
+            .hero-swiper .swiper-slide {
+                aspect-ratio: 4 / 3 !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
+        }

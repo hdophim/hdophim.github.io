@@ -112,6 +112,7 @@
                 const menuBtnIcon = document.getElementById('mobile-menu-btn')?.querySelector('i');
                 if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
                     mobileMenu.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
                     if (menuBtnIcon) {
                         menuBtnIcon.setAttribute('data-lucide', 'menu');
                         lucide.createIcons();
@@ -647,7 +648,7 @@
                                 </div>
 
                                 <div class="space-y-4 md:space-y-6">
-                                    <div class="bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-gray-200 dark:border-slate-800 rounded-xl md:rounded-2xl p-3 md:p-5 space-y-3 md:space-y-4 sticky top-20">
+                                    <div class="bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-gray-200 dark:border-slate-800 rounded-xl md:rounded-2xl p-3 md:p-5 space-y-3 md:space-y-4 sticky top-[7.5rem]">
                                         <div class="flex gap-3 md:gap-4">
                                             <img src="${getImageUrl(movie.poster_url)}" class="w-20 sm:w-24 h-28 sm:h-36 object-cover rounded-lg md:rounded-xl border border-gray-200 dark:border-slate-800 shadow-lg">
                                             <div>
@@ -811,16 +812,27 @@
 
                 const menuBtn = document.getElementById('mobile-menu-btn');
                 const mobileMenu = document.getElementById('mobile-menu');
-                menuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                    const icon = menuBtn.querySelector('i');
-                    if (mobileMenu.classList.contains('hidden')) {
-                        icon.setAttribute('data-lucide', 'menu');
-                    } else {
-                        icon.setAttribute('data-lucide', 'x');
-                    }
-                    lucide.createIcons();
-                });
+menuBtn.addEventListener('click', () => {
+                        mobileMenu.classList.toggle('hidden');
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            document.body.classList.add('overflow-hidden');
+                        } else {
+                            document.body.classList.remove('overflow-hidden');
+                        }
+                        const icon = menuBtn.querySelector('i');
+                        if (mobileMenu.classList.contains('hidden')) {
+                            icon.setAttribute('data-lucide', 'menu');
+                        } else {
+                            icon.setAttribute('data-lucide', 'x');
+                        }
+                        lucide.createIcons();
+                    });
+
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape') {
+                            closeMobileMenu();
+                        }
+                    });
 
                 mobileMenu.addEventListener('click', (e) => {
                     if (e.target.closest('a')) {
