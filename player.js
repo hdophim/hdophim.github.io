@@ -252,6 +252,29 @@
       this._buildSpeedList();
       this._applyVolume(this.startSettings.volume, this.startSettings.muted);
       this._setSpeed(this.startSettings.speed, false);
+      this._applyTheme();
+    }
+
+    _applyTheme() {
+      const root = document.documentElement;
+      const dark = root.classList.contains('dark') ||
+        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      this.container.classList.toggle('hdo-light', !dark);
+      this.container.classList.toggle('hdo-dark', !!dark);
+      if (!this._themeWired) {
+        this._themeWired = true;
+        const mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+        const sync = () => this._applyTheme();
+        if (mq) {
+          if (mq.addEventListener) mq.addEventListener('change', sync);
+          else if (mq.addListener) mq.addListener(sync);
+        }
+        if (window.MutationObserver) {
+          const obs = new MutationObserver(sync);
+          obs.observe(root, { attributes: true, attributeFilter: ['class'] });
+          this._themeObserver = obs;
+        }
+      }
     }
 
     _buildSpeedList() {
@@ -1089,6 +1112,7 @@
 
     _openSettings() {
       this.ytSettings.classList.add('open');
+      this._positionSettingsPanel();
       this._buildQualityList();
       this._buildSpeedList();
       clearTimeout(this._hideTimer);
@@ -1117,9 +1141,58 @@
     _hideSettingsPanel() {
       this.ytSettings.classList.remove('open');
       this._backToMain();
+      this._clearSettingsPosition();
       if (!this.video.paused) {
         this._resetHideTimer(true);
       }
+    }
+
+    _positionSettingsPanel() {
+      const rect = this.ytGear.getBoundingClientRect();
+      const isSmall = containerWidth => containerWidth < 260;
+      const sizeThis = this;
+      const update = () => {
+        const gear = sizeThis.ytGear.getBoundingClientRect();
+        const panelW = isSmall(sizeThis.container.clientWidth) ? 190 : 210;
+        const top = Math.max(8, gear.bottom + 8);
+        const right = Math.max(8, window.innerWidth - gear.right - 8);
+        const maxH = Math.min(window.innerHeight - top - 8, 400);
+        sizeThis.ytSettings.querySelectorAll('.hdo-yt-panel').forEach(p => {
+          p.style.position = 'fixed';
+          p.style.top = top + 'px';
+          p.style.right = right + 'px';
+          p.style.left = 'auto';
+          p.style.width = panelW + 'px';
+          p.style.maxHeight = Math.max(120, maxH) + 'px';
+        });
+      };
+      update();
+      this._onSettingsReposition = () => update();
+      window.addEventListener('resize', this._onSettingsReposition);
+      window.addEventListener('scroll', this._onSettingsReposition, true);
+      if (this._settingsResizeObserver) this._settingsResizeObserver.disconnect();
+      this._settingsResizeObserver = new ResizeObserver(() => update());
+      this._settingsResizeObserver.observe(this.container);
+    }
+
+    _clearSettingsPosition() {
+      if (this._onSettingsReposition) {
+        window.removeEventListener('resize', this._onSettingsReposition);
+        window.removeEventListener('scroll', this._onSettingsReposition, true);
+        this._onSettingsReposition = null;
+      }
+      if (this._settingsResizeObserver) {
+        this._settingsResizeObserver.disconnect();
+        this._settingsResizeObserver = null;
+      }
+      this.ytSettings.querySelectorAll('.hdo-yt-panel').forEach(p => {
+        p.style.position = '';
+        p.style.top = '';
+        p.style.right = '';
+        p.style.left = '';
+        p.style.width = '';
+        p.style.maxHeight = '';
+      });
     }
 
     // ============ FULLSCREEN / PIP ============
@@ -1954,6 +2027,28 @@
   .hdo-yt-list-item:hover { background: rgba(255,255,255,.1); color: #fff; }
   .hdo-yt-list-item.active { color: #e50914; font-weight: 700; }
   .hdo-yt-list-item.active::after { content: '\\2713'; margin-left: 8px; }
+
+  /* Light theme (follows site dark/light) */
+  .hdo-player.hdo-light .hdo-yt-panel {
+    background: rgba(255, 255, 255, .97);
+    box-shadow: 0 8px 32px rgba(0,0,0,.18);
+  }
+  .hdo-player.hdo-light .hdo-yt-header {
+    background: rgba(255,255,255,.99);
+    border-bottom: 1px solid rgba(0,0,0,.08);
+  }
+  .hdo-player.hdo-light .hdo-yt-title,
+  .hdo-player.hdo-light .hdo-yt-back { color: #111; }
+  .hdo-player.hdo-light .hdo-yt-back:hover { background: rgba(0,0,0,.08); }
+  .hdo-player.hdo-light .hdo-yt-item { color: #333; }
+  .hdo-player.hdo-light .hdo-yt-item:hover { background: rgba(0,0,0,.06); color: #000; }
+  .hdo-player.hdo-light .hdo-yt-value { color: #555; }
+  .hdo-player.hdo-light .hdo-yt-chev { color: #777; }
+  .hdo-player.hdo-light .hdo-yt-divider { background: rgba(0,0,0,.1); }
+  .hdo-player.hdo-light .hdo-yt-list-item { color: #333; }
+  .hdo-player.hdo-light .hdo-yt-list-item:hover { background: rgba(0,0,0,.06); color: #000; }
+  .hdo-player.hdo-light .hdo-yt-list-item.active { color: #e50914; }
+  .hdo-player.hdo-light .hdo-yt-panel::-webkit-scrollbar-thumb { background: rgba(0,0,0,.3); }
 
   /* Volume */
   .hdo-vol-wrap { position: relative; display: flex; align-items: center; flex-shrink: 0; }
