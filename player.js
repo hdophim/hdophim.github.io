@@ -1141,7 +1141,7 @@
         const gear = sizeThis.ytGear.getBoundingClientRect();
         const panelW = isSmall(sizeThis.container.clientWidth) ? 190 : 210;
         const top = Math.max(8, gear.bottom + 8);
-        const right = Math.max(8, window.innerWidth - gear.right - 8);
+        const right = Math.max(8, window.innerWidth - gear.right);
         const maxH = Math.min(window.innerHeight - top - 8, 400);
         sizeThis.ytSettings.querySelectorAll('.hdo-yt-panel').forEach(p => {
           p.style.position = 'fixed';
@@ -1926,22 +1926,27 @@
   .hdo-yt-gear svg { width: 22px; height: 22px; }
   .hdo-yt-panel {
     position: absolute;
-    top: 8px;
+    top: 0;
     right: 52px;
     width: 210px;
     background: rgba(28, 28, 28, .96);
+    border: 1px solid rgba(255,255,255,.08);
     border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.6);
+    box-shadow: 0 8px 32px rgba(0,0,0,.7), 0 2px 8px rgba(0,0,0,.4);
     overflow: hidden;
     opacity: 0;
-    transform: translateY(8px);
+    transform-origin: top right;
+    transform: scale(.92);
     pointer-events: none;
-    transition: opacity .2s ease, transform .2s ease;
+    will-change: transform, opacity;
+    transition: opacity .18s ease, transform .18s cubic-bezier(.2, 0, 0, 1);
     max-height: min(60vh, 400px);
     overflow-y: auto;
   }
-  .hdo-yt-settings.open .hdo-yt-panel-main:not(.hidden) { opacity: 1; transform: none; pointer-events: auto; }
-  .hdo-yt-settings.open .hdo-yt-panel-sub.active { opacity: 1; transform: none; pointer-events: auto; }
+  .hdo-yt-settings.open .hdo-yt-panel-main:not(.hidden) { opacity: 1; transform: scale(1); pointer-events: auto; }
+  .hdo-yt-settings.open .hdo-yt-panel-sub.active { opacity: 1; transform: scale(1); pointer-events: auto; }
+  .hdo-yt-panel-sub { transform: scale(.94) translateX(14px); }
+  .hdo-yt-panel-main.hidden { transform: scale(.94) translateX(-14px); }
   .hdo-yt-header {
     display: flex;
     align-items: center;
@@ -2017,7 +2022,8 @@
   /* Light theme (follows site dark/light) */
   .hdo-player.hdo-light .hdo-yt-panel {
     background: rgba(255, 255, 255, .97);
-    box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    border-color: rgba(0,0,0,.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,.18), 0 2px 8px rgba(0,0,0,.1);
   }
   .hdo-player.hdo-light .hdo-yt-header {
     background: rgba(255,255,255,.99);
