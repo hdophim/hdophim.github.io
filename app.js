@@ -271,16 +271,50 @@
                         document.querySelector('.mobile-quocgia-content').innerHTML = html;
                     }
 
-                    if (yearsCache.length > 0) {
-                        const html = yearsCache.map(y => {
-                            let name = typeof y === 'object' ? (y.name || y.year || y.slug || '') : y;
-                            let slug = typeof y === 'object' ? (y.slug || y.name || y.year || '') : y;
-                            if (!name || name === 'undefined') return '';
-                            return `<a href="#/nam/${slug}" class="${dropdownItemClass} text-center">${name}</a>`;
-                        }).filter(Boolean).join('');
-                        document.getElementById('dropdown-nam').innerHTML = html;
-                        document.querySelector('.mobile-nam-content').innerHTML = html;
-                    }
+                    const yearNum = (y) => {
+                        const raw = typeof y === 'object' ? (y.name || y.year || y.slug || '') : String(y);
+                        const m = raw.match(/\d{4}/);
+                        return m ? parseInt(m[0], 10) : NaN;
+                    };
+                    const yearList = yearsCache.map(yearNum).filter(Number.isFinite);
+                    const minYear = yearList.length ? Math.min.apply(null, yearList) : null;
+                    const curYear = new Date().getFullYear();
+
+                    const yearFormHtml = (prefix) => {
+                        const ph = minYear ? `${minYear} - ${curYear}` : 'Nhập năm';
+                        const min = minYear || 1900;
+                        const item = (id) => `
+                            <form id="${id}-form" class="year-form w-full flex items-center gap-1.5">
+                                <input type="number" inputmode="numeric" min="${min}" max="${curYear}" placeholder="${ph}" aria-label="Nhập năm phát hành"
+                                    class="year-input w-full flex-1 min-w-0 bg-gray-100 dark:bg-slate-800 text-sm text-gray-900 dark:text-slate-200 px-2.5 py-1.5 rounded-lg border border-gray-300 dark:border-slate-700 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30 transition placeholder:text-gray-400 dark:placeholder:text-slate-500" />
+                                <button type="submit" aria-label="Xem phim năm" class="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-brand hover:bg-brand-dark text-white font-bold transition text-lg leading-none pb-0.5">→</button>
+                            </form>
+                            <p class="text-[10px] text-gray-400 dark:text-slate-500 text-center mt-1">Nhập năm rồi bấm Enter</p>`;
+                        return item(prefix);
+                    };
+
+                    const desktopYear = document.getElementById('dropdown-nam');
+                    const mobileYear = document.querySelector('.mobile-nam-content');
+                    desktopYear.innerHTML = `<div class="col-span-full flex flex-col gap-0.5">${yearFormHtml('year-desktop')}</div>`;
+                    mobileYear.innerHTML = `<div class="col-span-full flex flex-col gap-0.5">${yearFormHtml('year-mobile')}</div>`;
+
+                    const bindYearForm = (id) => {
+                        const form = document.getElementById(id + '-form');
+                        if (!form) return;
+                        form.addEventListener('submit', (e) => {
+                            e.preventDefault();
+                            const input = form.querySelector('.year-input');
+                            const value = parseInt(input.value, 10);
+                            if (!Number.isFinite(value)) return;
+                            const lo = minYear || 1900;
+                            const year = Math.min(curYear, Math.max(lo, value));
+                            input.value = '';
+                            window.location.hash = `#/nam/${year}`;
+                            closeMobileMenu();
+                        });
+                    };
+                    bindYearForm('year-desktop');
+                    bindYearForm('year-mobile');
 
                     document.querySelectorAll('.accordion-toggle').forEach(btn => {
                         btn.addEventListener('click', function(e) {
