@@ -773,7 +773,6 @@
                 router();
 
                 const searchForms = [
-                    { formId: 'search-form-mobile-header', inputId: 'search-input-mobile-header' },
                     { formId: 'search-form-mobile-menu', inputId: 'search-input-mobile-menu' },
                     { formId: 'search-form-desktop', inputId: 'search-input-desktop' }
                 ];
@@ -781,18 +780,16 @@
                     const form = document.getElementById(formId);
                     if (!form) return;
                     const input = document.getElementById(inputId);
-                    const btnPhim = form.querySelector('[data-mode="phim"]');
-                    const btnNam = form.querySelector('[data-mode="nam"]');
+                    const chip = form.querySelector('.search-mode-chip');
+                    const label = form.querySelector('.search-mode-label');
                     let mode = 'phim';
                     const curYear = new Date().getFullYear();
                     const setMode = (m) => {
                         mode = m;
-                        if (btnPhim) btnPhim.classList.toggle('active', m === 'phim');
-                        if (btnNam) btnNam.classList.toggle('active', m === 'nam');
+                        if (label) label.textContent = m === 'nam' ? 'Năm' : 'Phim';
                         input.placeholder = m === 'nam' ? 'Nhập năm (vd 2000)' : 'Tìm phim...';
                     };
-                    if (btnPhim) btnPhim.addEventListener('click', () => setMode('phim'));
-                    if (btnNam) btnNam.addEventListener('click', () => setMode('nam'));
+                    if (chip) chip.addEventListener('click', () => setMode(mode === 'phim' ? 'nam' : 'phim'));
                     form.addEventListener('submit', (e) => {
                         e.preventDefault();
                         const kw = input.value.trim();

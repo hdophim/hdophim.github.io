@@ -133,28 +133,5 @@
         .nav-link { font-size: clamp(0.9rem, 1.2vw, 1rem); }
         .logo-text { font-size: clamp(1.5rem, 3vw, 2.2rem); }
         .search-input { font-size: clamp(0.85rem, 1.2vw, 1rem); }
-        .search-pill { pointer-events: auto; }
-        .search-mode-btn {
-            font-size: 11px;
-            font-weight: 700;
-            line-height: 1;
-            padding: 5px 9px;
-            border-radius: 9999px;
-            color: #64748b;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: color .15s, background .15s;
-        }
-        .search-mode-btn.active {
-            background: #ffffff;
-            color: #0f172a;
-            box-shadow: 0 1px 3px rgba(0,0,0,.12);
-        }
-        .dark .search-mode-btn { color: #94a3b8; }
-        .dark .search-mode-btn.active {
-            background: #475569;
-            color: #fff;
-        }
+        .search-mode-chip { pointer-events: auto; }
         .back-to-top { font-size: 1rem; }

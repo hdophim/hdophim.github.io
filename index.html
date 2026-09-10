@@ -126,17 +126,8 @@
                 </a>
             </nav>
 
-            <!-- Mobile Search + Menu Toggle -->
+            <!-- Mobile Menu Toggle -->
             <div class="flex items-center gap-2 flex-1 md:flex-none justify-end">
-                <form id="search-form-mobile-header" class="relative flex-1 max-w-[170px] sm:max-w-xs block md:hidden">
-                    <div class="search-pill absolute left-1 top-1/2 -translate-y-1/2 flex items-center bg-gray-200/80 dark:bg-slate-700/70 rounded-full p-0.5 z-10">
-                        <button type="button" class="search-mode-btn active" data-mode="phim">Phim</button>
-                        <button type="button" class="search-mode-btn" data-mode="nam">Năm</button>
-                    </div>
-                    <input type="text" id="search-input-mobile-header" placeholder="Tìm phim..."
-                    class="w-full bg-gray-100 dark:bg-slate-900/80 text-sm text-gray-900 dark:text-slate-200 pl-[5rem] pr-8 py-1.5 rounded-full border border-gray-300 dark:border-slate-700/60 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30 transition placeholder:text-gray-400 dark:placeholder:text-slate-500 search-input">
-                </form>
-
                 <button id="mobile-menu-btn" class="md:hidden text-gray-600 dark:text-slate-300 hover:text-black dark:hover:text-white transition p-1">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
@@ -174,13 +165,13 @@
 
             <div class="pt-2 border-t border-gray-200 dark:border-slate-800">
                 <form id="search-form-mobile-menu" class="relative max-w-xs mx-auto">
-                    <div class="search-pill absolute left-1 top-1/2 -translate-y-1/2 flex items-center bg-gray-200/80 dark:bg-slate-700/70 rounded-full p-0.5 z-10">
-                        <button type="button" class="search-mode-btn active" data-mode="phim">Phim</button>
-                        <button type="button" class="search-mode-btn" data-mode="nam">Năm</button>
-                    </div>
                     <input type="text" id="search-input-mobile-menu" placeholder="Tìm phim..."
-                    class="w-full bg-gray-100 dark:bg-slate-800 text-base text-gray-900 dark:text-slate-200 pl-[5rem] pr-10 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 focus:outline-none focus:border-brand search-input">
-                    <i data-lucide="search" class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400"></i>
+                    class="w-full bg-gray-100 dark:bg-slate-800 text-base text-gray-900 dark:text-slate-200 px-4 pr-28 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 focus:outline-none focus:border-brand search-input">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400"></i>
+                    <button type="button" class="search-mode-chip absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-gray-200/90 dark:bg-slate-700/80 text-gray-600 dark:text-slate-200 hover:bg-gray-300 dark:hover:bg-slate-600 text-xs font-bold px-2.5 py-1.5 rounded-lg transition" data-mode="phim">
+                        <i data-lucide="arrows-up-down" class="w-3.5 h-3.5"></i>
+                        <span class="search-mode-label">Phim</span>
+                    </button>
                 </form>
             </div>
         </div>
@@ -190,13 +181,13 @@
     <div class="hidden md:block bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-gray-200 dark:border-slate-800/70 py-2 sticky top-14 md:top-16 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
             <form id="search-form-desktop" class="relative max-w-md mx-auto">
-                <div class="search-pill absolute left-1 top-1/2 -translate-y-1/2 flex items-center bg-gray-200/80 dark:bg-slate-700/70 rounded-full p-0.5 z-10">
-                    <button type="button" class="search-mode-btn active" data-mode="phim">Phim</button>
-                    <button type="button" class="search-mode-btn" data-mode="nam">Năm</button>
-                </div>
                 <input type="text" id="search-input-desktop" placeholder="Tìm phim..."
-                class="w-full bg-gray-100 dark:bg-slate-900/80 text-base text-gray-900 dark:text-slate-200 pl-[5rem] pr-10 py-2 rounded-full border border-gray-300 dark:border-slate-700/60 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30 transition placeholder:text-gray-400 dark:placeholder:text-slate-500 search-input">
-                <i data-lucide="search" class="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400"></i>
+                class="w-full bg-gray-100 dark:bg-slate-900/80 text-base text-gray-900 dark:text-slate-200 pl-9 pr-24 py-2 rounded-full border border-gray-300 dark:border-slate-700/60 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30 transition placeholder:text-gray-400 dark:placeholder:text-slate-500 search-input">
+                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400"></i>
+                <button type="button" class="search-mode-chip absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-gray-200/90 dark:bg-slate-700/80 text-gray-600 dark:text-slate-200 hover:bg-gray-300 dark:hover:bg-slate-600 text-xs font-bold px-3 py-1.5 rounded-full transition" data-mode="phim">
+                    <i data-lucide="arrows-up-down" class="w-3.5 h-3.5"></i>
+                    <span class="search-mode-label">Phim</span>
+                </button>
             </form>
         </div>
     </div>
