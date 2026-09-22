@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>HDOphim • Xem Phim HD Online</title>
+
+    <!-- Tự động chuyển theme sáng/tối theo trình duyệt -->
+    <script>
+        (function() {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (e.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            });
+        })();
+    </script>
+
+    <!-- Font chữ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    colors: {
+                        brand: {
+                            DEFAULT: '#e50914',
+                            dark: '#b90910',
+                            light: '#ff1a25'
+                        }
+                    },
+                    animation: {
+                        'shimmer': 'shimmer 2s infinite linear',
+                        'fade-in': 'fadeIn 0.5s ease-out'
+                    },
+                    keyframes: {
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- HLS.js (cho player) - tự lưu local, không phụ thuộc CDN -->
+    <script src="./hls.min.js"></script>
+    <!-- Player HDO -->
+    <script src="./player.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest">
+    </script>
+
+    <link rel="stylesheet" href="./style.css" />
+</head>
+<body class="bg-white dark:bg-slate-950 text-gray-900 dark:text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- ===== HEADER ===== -->
+    <header class="sticky top-0 z-50 bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-gray-200 dark:border-slate-800/70 shadow-lg shadow-black/5">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 h-14 md:h-16 flex items-center justify-between gap-2">
+
+            <!-- Logo -->
+            <a href="#/" class="flex items-center gap-1.5 logo-text font-black tracking-tight text-brand shrink-0">
+                <i data-lucide="clapperboard" class="w-6 h-6 md:w-7 md:h-7"></i>
+                <span>HDO<span class="text-gray-900 dark:text-white">phim</span></span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-4 lg:gap-5 nav-link font-medium text-gray-600 dark:text-slate-300">
+                <a href="#/" class="hover:text-brand transition whitespace-nowrap">Trang Chủ</a>
+                <a href="#/danh-sach/phim-bo" class="hover:text-brand transition whitespace-nowrap">Phim Bộ</a>
+                <a href="#/danh-sach/phim-le" class="hover:text-brand transition whitespace-nowrap">Phim Lẻ</a>
+                <a href="#/danh-sach/phim-chieu-rap" class="hover:text-brand transition whitespace-nowrap hidden lg:inline">Phim Chiếu Rạp</a>
+                <a href="#/danh-sach/hoat-hinh" class="hover:text-brand transition whitespace-nowrap hidden lg:inline">Hoạt Hình</a>
+
+                <!-- Dropdown Thể Loại -->
+                <div class="relative group py-4">
+                    <button class="flex items-center gap-1 hover:text-brand transition whitespace-nowrap">
+                        Thể Loại <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div class="dropdown-menu absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 grid grid-cols-2 md:grid-cols-3 gap-1 w-64 md:w-80 p-3 bg-white dark:bg-slate-900/95 backdrop-blur-md border border-gray-200 dark:border-slate-800 rounded-xl shadow-2xl max-h-80 overflow-y-auto dropdown-scroll" id="dropdown-theloai">
+                        <span class="col-span-3 text-xs text-gray-500 dark:text-slate-500 text-center py-2">Đang tải...</span>
+                    </div>
+                </div>
+
+                <!-- Dropdown Quốc Gia -->
+                <div class="relative group py-4">
+                    <button class="flex items-center gap-1 hover:text-brand transition whitespace-nowrap">
+                        Quốc Gia <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div class="dropdown-menu absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 grid grid-cols-2 gap-1 w-56 md:w-64 p-3 bg-white dark:bg-slate-900/95 backdrop-blur-md border border-gray-200 dark:border-slate-800 rounded-xl shadow-2xl max-h-80 overflow-y-auto dropdown-scroll" id="dropdown-quocgia">
+                        <span class="col-span-2 text-xs text-gray-500 dark:text-slate-500 text-center py-2">Đang tải...</span>
+                    </div>
+                </div>
+
+                <!-- Lịch sử xem -->
+                <a href="#/lich-su" class="hover:text-brand transition flex items-center gap-1.5 text-amber-500 dark:text-amber-400 font-semibold whitespace-nowrap">
+                    <i data-lucide="history" class="w-4 h-4"></i> <span class="hidden xl:inline">Lịch Sử</span>
+                </a>
+            </nav>
+
+            <!-- Mobile Menu Toggle -->
+            <div class="flex items-center gap-2 flex-1 md:flex-none justify-end">
+                <button id="mobile-menu-btn" class="md:hidden text-gray-600 dark:text-slate-300 hover:text-black dark:hover:text-white transition p-1">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white dark:bg-slate-900/95 backdrop-blur-xl border-t border-gray-200 dark:border-slate-800 px-4 py-4 space-y-3 max-h-[80vh] overflow-y-auto animate-fade-in">
+            <a href="#/" class="block py-2 text-base font-medium text-gray-800 dark:text-white hover:text-brand">Trang Chủ</a>
+            <a href="#/lich-su" class="block py-2 text-base font-semibold text-amber-500 dark:text-amber-400 hover:text-amber-600 dark:hover:text-amber-300 flex items-center gap-2">
+                <i data-lucide="history" class="w-4 h-4"></i> Lịch Sử Xem Phim
+            </a>
+            <a href="#/danh-sach/phim-bo" class="block py-2 text-base font-medium text-gray-800 dark:text-white hover:text-brand">Phim Bộ</a>
+            <a href="#/danh-sach/phim-le" class="block py-2 text-base font-medium text-gray-800 dark:text-white hover:text-brand">Phim Lẻ</a>
+            <a href="#/danh-sach/phim-chieu-rap" class="block py-2 text-base font-medium text-gray-800 dark:text-white hover:text-brand">Phim Chiếu Rạp</a>
+            <a href="#/danh-sach/hoat-hinh" class="block py-2 text-base font-medium text-gray-800 dark:text-white hover:text-brand">Hoạt Hình</a>
+
+            <!-- Accordion: Thể Loại -->
+            <div class="accordion">
+                <button class="accordion-toggle w-full text-left py-2 text-base font-medium text-gray-800 dark:text-white hover:text-brand flex justify-between items-center border-t border-gray-200 dark:border-slate-800 pt-3">
+                    <span>Thể Loại</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+                </button>
+                <div class="accordion-content hidden pl-2 grid grid-cols-2 gap-1 pb-2 max-h-60 overflow-y-auto mobile-theloai-content"></div>
+            </div>
+
+            <!-- Accordion: Quốc Gia -->
+            <div class="accordion">
+                <button class="accordion-toggle w-full text-left py-2 text-base font-medium text-gray-800 dark:text-white hover:text-brand flex justify-between items-center border-t border-gray-200 dark:border-slate-800 pt-3">
+                    <span>Quốc Gia</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+                </button>
+                <div class="accordion-content hidden pl-2 grid grid-cols-2 gap-1 pb-2 max-h-60 overflow-y-auto mobile-quocgia-content"></div>
+            </div>
+
+            <div class="pt-2 border-t border-gray-200 dark:border-slate-800">
+                <form id="search-form-mobile-menu" class="relative max-w-xs mx-auto">
+                    <input type="text" id="search-input-mobile-menu" placeholder="Tìm phim..."
+                    class="w-full bg-gray-100 dark:bg-slate-800 text-base text-gray-900 dark:text-slate-200 pl-9 pr-28 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 focus:outline-none focus:border-brand search-input">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400"></i>
+                    <button type="button" class="search-mode-chip absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-gray-200/90 dark:bg-slate-700/80 text-gray-600 dark:text-slate-200 hover:bg-gray-300 dark:hover:bg-slate-600 text-xs font-bold px-2.5 py-1.5 rounded-lg transition" data-mode="phim">
+                        <i data-lucide="arrows-up-down" class="w-3.5 h-3.5"></i>
+                        <span class="search-mode-label">Phim</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== THANH TÌM KIẾM MÀN HÌNH LỚN ===== -->
+    <div class="search-bar hidden md:block bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-gray-200 dark:border-slate-800/70 py-2 sticky z-40">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+            <form id="search-form-desktop" class="relative max-w-md mx-auto">
+                <input type="text" id="search-input-desktop" placeholder="Tìm phim..."
+                class="w-full bg-gray-100 dark:bg-slate-900/80 text-base text-gray-900 dark:text-slate-200 pl-9 pr-24 py-2 rounded-full border border-gray-300 dark:border-slate-700/60 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30 transition placeholder:text-gray-400 dark:placeholder:text-slate-500 search-input">
+                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400"></i>
+                <button type="button" class="search-mode-chip absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-gray-200/90 dark:bg-slate-700/80 text-gray-600 dark:text-slate-200 hover:bg-gray-300 dark:hover:bg-slate-600 text-xs font-bold px-3 py-1.5 rounded-full transition" data-mode="phim">
+                    <i data-lucide="arrows-up-down" class="w-3.5 h-3.5"></i>
+                    <span class="search-mode-label">Phim</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main id="app-content" class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-4 lg:px-8 py-4 md:py-6 loaded">
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="border-t border-gray-200 dark:border-slate-900 bg-white dark:bg-slate-950 py-6 md:py-8 text-center footer-text text-gray-500 dark:text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>© 2026 HDOphim · Xem phim trực tuyến miễn phí</p>
+            <p class="flex items-center gap-1">Hosted on <span class="text-gray-700 dark:text-slate-400">GitHub Pages</span> <i data-lucide="github" class="w-3.5 h-3.5"></i></p>
+        </div>
+    </footer>
+
+    <button id="back-to-top" class="fixed bottom-6 right-6 z-40 p-3 bg-brand hover:bg-brand-dark text-white rounded-full shadow-lg shadow-brand/30 transition opacity-0 invisible translate-y-2 duration-300 back-to-top" title="Lên đầu trang">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js">
+    </script>
+    <script src="./app.js"></script>
+</body>
+</html>
+
